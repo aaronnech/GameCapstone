@@ -1,0 +1,52 @@
+#SimpleMap {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 20px;
+}
+
+#SimpleMap-tools {
+	float: left;
+	width: 33%;
+}
+
+#SimpleMap-display {
+	float: right;
+	width: 66%;
+}
+#SimpleMap-render {
+	width: 800px;
+	height: 600px;
+}
+.clear{
+	clear: both;
+}
+ul.grid li {
+    width: 32px;
+    display: inline-block;
+    vertical-align: top;
+    *display: inline;
+    *zoom: 1;
+}
+
+ul.grid li a {
+	width: 28px;
+	height: 28px;
+    padding: 2px;
+    display: block;
+}
+ul.grid li a:hover, ul.grid li a.selectedSwatch {
+	width: 28px;
+	height: 28px;
+    border: 2px black solid;
+    padding: 0;
+}
+
+ul.grid li.image a img {
+	width: 28px;
+	height: 28px;
+}
+
+
+li.no-image a.object {
+	border-radius: 50%;
+}
