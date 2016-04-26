@@ -13,7 +13,9 @@ SimpleMap.Map = function() {
 };
 SimpleMap.Map.method("place", function(def, x, y, img) {
 	if(!this.outOfBounds(x, y)) {
-		if(def.type == 'tile') {
+		if(def.name == 'Delete') {
+			this.remove('object', x, y);
+		} else if(def.type == 'tile') {
 			this.remove('tile', x, y);
 			this.tiles.push(new SimpleMap.Tile(def, x, y, img));
 		} else if(def.type == 'object') {

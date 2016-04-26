@@ -31,6 +31,20 @@ $(document).ready(function() {
 		],
 		'objects' : [
 			{
+				"group" : "Delete",
+				"members" : [
+					{
+						'type' : 'object',
+						'name' : 'Delete',
+						'color' : '#FF0000',
+						'attributes' : {
+							'color' : 'red',
+							'type' : 'delete'
+						}
+					},
+				]
+			},
+			{
 				"group" : "Vehicles",
 				"members" : [
 					{
