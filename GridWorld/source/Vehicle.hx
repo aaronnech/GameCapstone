@@ -9,4 +9,8 @@ class Vehicle extends Turnable {
 		super(id, x, y, direction);
 		this.color = color;
 	}
+
+    public function hashcode():Int {
+        this.id;
+    }
 }
