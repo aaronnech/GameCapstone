@@ -1,5 +1,7 @@
 package;
 
+import Color;
+
 class Goal extends Movable {
 	public var color:Color;
 

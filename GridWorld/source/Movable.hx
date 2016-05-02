@@ -1,5 +1,7 @@
 package;
 
+import GameObject;
+
 class Movable extends GameObject {
 	public var x:Int;
 	public var y:Int;
@@ -14,11 +16,6 @@ class Movable extends GameObject {
 
 		this.startingX = x;
 		this.startingY = y;
-	}
-
-	public function updatePosition(deltaX:Int, deltaY:Int) {
-		this.x += deltaX;
-		this.y += deltaY;
 	}
 
 	public function reset() {

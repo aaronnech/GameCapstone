@@ -1,5 +1,7 @@
 package;
 
+import Color;
+
 class Gem extends Movable {
 	public var color:Color;
 

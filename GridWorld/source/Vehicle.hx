@@ -1,5 +1,7 @@
 package;
 
+import Color;
+
 class Vehicle extends Turnable {
 	public var color:Color;
 

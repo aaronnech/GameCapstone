@@ -56,7 +56,7 @@ class Turnable extends Movable {
 		}
 	}
 
-	override public reset() {
+	override public function reset() {
 		super.reset();
 		this.direction = startingDirection;
 	}
