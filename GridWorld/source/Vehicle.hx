@@ -3,8 +3,8 @@ package;
 class Vehicle extends Turnable {
 	public var color:Color;
 
-	override public function new(color:Color, x:Int, y:Int, direction:Int) {
-		super(x, y, direction);
+	override public function new(id:Int, color:Color, x:Int, y:Int, direction:Int) {
+		super(id, x, y, direction);
 		this.color = color;
 	}
 }
