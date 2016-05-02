@@ -29,10 +29,20 @@ class Simulator {
 		this.vehicles = level.getVehicles();
 		this.gems = level.getGems();
 		this.goals = level.getGoals();
+
+		this.getVehicles();
 	}
 
 	public function getVehicles():Array<Vehicle> {
-		return this.vehicles;
+		var result = new Array();
+		for (color in this.vehicles.keys()) {
+			var vehicles = this.vehicles.get(color);
+			for (i in 0...vehicles.length) {
+				result.push(vehicles[i]);
+			}
+		}
+
+		return result;
 	}
 
 	public function getGems():Array<Gem> {
