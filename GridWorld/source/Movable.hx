@@ -1,13 +1,14 @@
 package;
 
-class Movable {
+class Movable extends GameObject {
 	public var x:Int;
 	public var y:Int;
 
 	public var startingX:Int;
 	public var startingY:Int;
 
-	public function new(x:Int, y:Int) {
+	public function new(id:Int, x:Int, y:Int) {
+		super(id);
 		this.x = x;
 		this.y = y;
 

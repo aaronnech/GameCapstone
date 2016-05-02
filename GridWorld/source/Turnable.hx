@@ -10,8 +10,8 @@ class Turnable extends Movable {
 
 	public var startingDirection:Int;
 
-	override public function new(x:Int, y:Int, direction:Int) {
-		super(x, y);
+	override public function new(id:Int, x:Int, y:Int, direction:Int) {
+		super(id, x, y);
 		this.direction = direction;
 		this.startingDirection = direction;
 	}
