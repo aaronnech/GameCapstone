@@ -1,10 +1,5 @@
 package ;
 
-#if sys
-	import sys.io.File;
-#elseif js
-	import js.Browser;
-#end
 
 class Level {
 	private var json:Dynamic;
@@ -14,22 +9,9 @@ class Level {
 		this.name = filePath;
 	}
 
-	public function load(cb:Dynamic) {
-		#if sys
-			var s = File.getContent(this.name);
-			this.json = haxe.Json.parse(s);
-			cb();
-		#elseif js
-			var req = new haxe.Http(this.name);
-			req.onData = function (data : String) {
-				this.json = haxe.Json.parse(data);
-				cb();
-			}
-			req.onError = function (error) {
-				trace(error);
-			}
-			req.request(false);
-		#end
+	public function load() {
+		var s = openfl.Assets.getText(this.name);
+		this.json = haxe.Json.parse(s);
 	}
 
 	public function getGrid() {

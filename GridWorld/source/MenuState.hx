@@ -1,4 +1,4 @@
-package;
+package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -6,23 +6,29 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
+import flixel.math.FlxVelocity;
+import flixel.system.FlxSound;
 
-class MenuState extends FlxState
-{
-	private var level:Level;
+class MenuState extends FlxState {
+	private var play:FlxButton;
+	private var instructionText:FlxText;
 
-	override public function create():Void
-	{
+	override public function create():Void {
 		super.create();
-		this.level = new Level('assets/levels/level.1.json');
-		this.level.load(function() {
-			trace(this.level.getGrid());
-			trace(this.level.getObjects());
-		});
+		FlxG.mouse.visible = true;
+
+		play = new FlxButton(0, 0, "Play", clickPlay);
+		play.screenCenter();
+		add(play);
+
+		instructionText = new FlxText(0, 0);
+		instructionText.text = "GRIDWORLD";
+		instructionText.screenCenter();
+		instructionText.y = instructionText.y - 70;
+		add(instructionText);
 	}
 
-	override public function update(elapsed:Float):Void
-	{
-		super.update(elapsed);
+	private function clickPlay():Void {
+		FlxG.switchState(new LevelSelectState());
 	}
 }

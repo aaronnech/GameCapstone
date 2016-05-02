@@ -14,9 +14,7 @@ class Simulator {
 	public function new(
 		width:Int,
 		height:Int,
-		vehicles:Map<Color, Vehicle>,
-		goals:Array<Goal>,
-		gems:Array<Gem>
+		level: Level
 	) {
 		this.width = width;
 		this.height = height;
