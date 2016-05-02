@@ -14,7 +14,7 @@ class Simulator {
 	public function new(
 		width:Int,
 		height:Int,
-		vehicles:Map<Color, Vehicle>,
+		vehicles:Map<Color, Array<Vehicle>>,
 		goals:Array<Goal>,
 		gems:Array<Gem>
 	) {
