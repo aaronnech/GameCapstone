@@ -31,6 +31,18 @@ class Simulator {
 		this.goals = level.getGoals();
 	}
 
+	public function getVehicles():Array<Vehicle> {
+		return this.vehicles;
+	}
+
+	public function getGems():Array<Gem> {
+		return this.gems;
+	}
+
+	public function getGoals():Array<Goal> {
+		return this.goals;
+	}
+
 	public function onSetControls(controls:Map<Color, Array<Control>>) {
 		this.reset();
 		this.controls = controls;
@@ -52,7 +64,6 @@ class Simulator {
 			}
 
 			this.controlIndices[color] += 1;
-
 			// Reset the index of the control back to the beginning if gone over
 			if (index >= this.controls[color].length) {
 				this.controlIndices[color] = 0;
