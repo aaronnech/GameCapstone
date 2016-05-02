@@ -45,7 +45,7 @@ $(document).ready(function() {
 				]
 			},
 			{
-				"group" : "Vehicles",
+				"group" : "VehiclesNorth",
 				"members" : [
 					{
 						'type' : 'object',
@@ -53,7 +53,8 @@ $(document).ready(function() {
 						'color' : '#0000FF',
 						'attributes' : {
 							'color' : 'blue',
-							'type' : 'Vehicles'
+							'type' : 'VehiclesNorth',
+							'orientation' : 0
 						}
 					},
 					{
@@ -62,7 +63,8 @@ $(document).ready(function() {
 						'color' : '#FF0000',
 						'attributes' : {
 							'color' : 'red',
-							'type' : 'Vehicles'
+							'type' : 'VehiclesNorth',
+							'orientation' : 0
 						}
 					},
 					{
@@ -71,7 +73,113 @@ $(document).ready(function() {
 						'color' : '#00FF00',
 						'attributes' : {
 							'color' : 'green',
-							'type' : 'Vehicles'
+							'type' : 'VehiclesNorth',
+							'orientation' : 0
+						}
+					}
+				]
+			},
+			{
+				"group" : "VehiclesEast",
+				"members" : [
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 1',
+						'color' : '#0000FF',
+						'attributes' : {
+							'color' : 'blue',
+							'type' : 'VehiclesEast',
+							'orientation' : 1
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 2',
+						'color' : '#FF0000',
+						'attributes' : {
+							'color' : 'red',
+							'type' : 'VehiclesEast',
+							'orientation' : 1
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 3',
+						'color' : '#00FF00',
+						'attributes' : {
+							'color' : 'green',
+							'type' : 'VehiclesEast',
+							'orientation' : 1
+						}
+					}
+				]
+			},
+			{
+				"group" : "VehiclesSouth",
+				"members" : [
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 1',
+						'color' : '#0000FF',
+						'attributes' : {
+							'color' : 'blue',
+							'type' : 'VehiclesSouth',
+							'orientation' : 3
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 2',
+						'color' : '#FF0000',
+						'attributes' : {
+							'color' : 'red',
+							'type' : 'VehiclesSouth',
+							'orientation' : 3
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 3',
+						'color' : '#00FF00',
+						'attributes' : {
+							'color' : 'green',
+							'type' : 'VehiclesSouth',
+							'orientation' : 3
+						}
+					}
+				]
+			},
+			{
+				"group" : "VehiclesWest",
+				"members" : [
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 1',
+						'color' : '#0000FF',
+						'attributes' : {
+							'color' : 'blue',
+							'type' : 'VehiclesWest',
+							'orientation' : 3
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 2',
+						'color' : '#FF0000',
+						'attributes' : {
+							'color' : 'red',
+							'type' : 'VehiclesWest',
+							'orientation' : 3
+						}
+					},
+					{
+						'type' : 'object',
+						'name' : 'Vehicle 3',
+						'color' : '#00FF00',
+						'attributes' : {
+							'color' : 'green',
+							'type' : 'VehiclesWest',
+							'orientation' : 3
 						}
 					}
 				]
@@ -352,6 +460,9 @@ function render(processing) {
 }
 function toJson() {
 	var result = {};
+	result.width = simpleMap.width;
+	result.height = simpleMap.height;
+	result.tileSize = simpleMap.tileSize;
 	result.tileData = simpleMap.exportTiles();
 	result.objectData = simpleMap.exportObjects();
 	alert(JSON.stringify(result));
