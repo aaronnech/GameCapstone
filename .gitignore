@@ -104,7 +104,6 @@ tramp
 _site/
 .sass-cache/
 .jekyll-metadata
-assets/
 
 ### Mac ###
 .DS_Store
