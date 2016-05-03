@@ -2,12 +2,12 @@ package;
 
 import haxe.ds.HashMap;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
-    // private static inline var DURATION = 0.5;
     private static inline var X_OFFSET = 24;
     private static inline var Y_OFFSET = 24;
 
@@ -32,6 +32,12 @@ class ObjectManager implements SpriteManager {
         for (i in 0...obj.length) {
             var o = obj[i];
             var sprite = new FlxSprite(o.x * tileSize + X_OFFSET, o.y * tileSize + Y_OFFSET);
+
+            // Set direction of vehicle sprites.
+            if (Std.is(o, Vehicle)) {
+                sprite.facing = getDirection(o.direction);
+            }
+
             sprite.makeGraphic(this.tileSize, this.tileSize, color);
             map.set(o, sprite);
         }
@@ -63,8 +69,39 @@ class ObjectManager implements SpriteManager {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.y * tileSize + Y_OFFSET;
-            FlxTween.tween(map.get(o), {x: newX, y:newY}, PlayState.TICK_TIME / 2);
-            // FlxTween.angle(map.get(o))
+            var sprite = map.get(o);
+            FlxTween.tween(sprite, {x: newX, y:newY}, PlayState.TICK_TIME / 2);
+
+            // Rotate vehicle
+            if (Std.is(o, Vehicle) && sprite.facing != getDirection(o.direction)) {
+                var diff = o.direction;
+                switch sprite.facing {
+                    case FlxObject.UP: // diff -= 0;
+                    case FlxObject.RIGHT: diff -= 1;
+                    case FlxObject.DOWN: diff -= 2;
+                    case FlxObject.LEFT: diff -= 3;
+                }
+
+                if (diff == 1 || diff == -3) {
+                    // Turn right
+                    FlxTween.angle(sprite, 0, 90, PlayState.TICK_TIME / 2);
+                    sprite.facing = getDirection(o.direction);
+                } else if (diff == -1 || diff == 3) {
+                    // Turn left
+                    FlxTween.angle(sprite, 0, -90, PlayState.TICK_TIME / 2);
+                    sprite.facing = getDirection(o.direction);
+                }
+            }
+        }
+    }
+
+    private function getDirection(i:Int):Int {
+        switch i {
+            case 0: return FlxObject.UP;
+            case 1: return FlxObject.RIGHT;
+            case 2: return FlxObject.DOWN;
+            case 3: return FlxObject.LEFT;
+            default: return -1;
         }
     }
 
