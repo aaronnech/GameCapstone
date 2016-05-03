@@ -7,7 +7,7 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
-    private static inline var DURATION = 1;
+    // private static inline var DURATION = 0.5;
     private static inline var X_OFFSET = 24;
     private static inline var Y_OFFSET = 24;
 
@@ -62,7 +62,7 @@ class ObjectManager implements SpriteManager {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.y * tileSize + Y_OFFSET;
-            FlxTween.tween(map.get(o), {x: newX, y:newY}, DURATION);
+            FlxTween.tween(map.get(o), {x: newX, y:newY}, PlayState.TICK_TIME);
             // FlxTween.angle(map.get(o))
         }
     }
