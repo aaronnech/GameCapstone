@@ -100,7 +100,9 @@ class Simulator {
 					if (!gem.moveWithDirection(vehicle.direction, this)) {
 						// Gem collided with the wall: Undo the control on the
 						var controls = this.controls.get(vehicle.color);
-						var index = (this.controlIndices.get(vehicle.color) - 1) % controls.length;
+
+						var index = this.controlIndices.get(vehicle.color);
+						index = (index == 0) ? controls.length - 1 : index - 1;
 						vehicle.undoControl(controls[index], this);
 					}
 
