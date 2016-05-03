@@ -14,9 +14,11 @@ import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.graphics.FlxGraphic;
 
 class PlayState extends FlxState {
+	private static var TICK_TIME:Int = 200;
 	private var level:Level;
 	private var mainSimulator:Simulator;
 	private var tileMap:FlxTilemap;
+	private var totalElapsed:Float;
 
 	public function new(level:Level) {
 		super();
@@ -34,9 +36,21 @@ class PlayState extends FlxState {
 		this.tileMap = new FlxTilemap();
 		this.tileMap.loadMapFrom2DArray(this.level.getGrid(), "assets/images/backgroundtiles.png", 24, 24, FlxTilemapAutoTiling.OFF, 0, 0);
 		add(this.tileMap);
+
+		this.totalElapsed = 0;
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+
+		this.totalElapsed = this.totalElapsed + elapsed;
+		if (this.totalElapsed > PlayState.TICK_TIME) {
+			if (this.mainSimulator.tick()) {
+
+			} else {
+				this.mainSimulator.reset();
+			}
+			this.totalElapsed = 0;
+		}
 	}
 }
