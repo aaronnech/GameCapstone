@@ -30,7 +30,6 @@ class PlayState extends FlxState {
 		super.create();
 
 		// FlxG.mouse.visible = false;
-
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
 
 		// Background tile map
@@ -38,6 +37,13 @@ class PlayState extends FlxState {
 		this.tileMap = new FlxTilemap();
 		this.tileMap.loadMapFrom2DArray(this.level.getGrid(), "assets/images/backgroundtiles.png", 24, 24, FlxTilemapAutoTiling.OFF, 0, 0);
 		add(this.tileMap);
+
+		// Objects
+		this.spriteManager = new ObjectManager(this.mainSimulator, this.level.getTileSize());
+		var sprites = this.spriteManager.getSprites();
+		for (sprite in sprites) {
+			add(sprite);
+		}
 
 		this.totalElapsed = 0;
 	}
@@ -48,7 +54,7 @@ class PlayState extends FlxState {
 		this.totalElapsed = this.totalElapsed + elapsed;
 		if (this.totalElapsed > PlayState.TICK_TIME) {
 			if (this.mainSimulator.tick()) {
-
+				this.spriteManager.update();
 			} else {
 				this.mainSimulator.reset();
 			}
