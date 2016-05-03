@@ -21,4 +21,16 @@ class Level {
 	public function getObjects() {
 		return this.json.objectData;
 	}
+
+	public function getWidth(): Int {
+		return this.json.width;
+	}
+
+	public function getHeight(): Int {
+		return this.json.height;
+	}
+
+	public function getTileSize(): Int {
+		return this.json.tileSize;
+	}
 }
