@@ -97,7 +97,7 @@ class Simulator {
 				var gem = this.gems[j];
 				if (gem.x == vehicle.x && gem.y == vehicle.y) {
 					// Gem and car are overlapping -> advance the gem forward
-					if (gem.moveWithDirection(vehicle.direction, this)) {
+					if (!gem.moveWithDirection(vehicle.direction, this)) {
 						// Gem collided with the wall: Undo the control on the
 						var controls = this.controls.get(vehicle.color);
 						var index = (this.controlIndices.get(vehicle.color) - 1) % controls.length;
