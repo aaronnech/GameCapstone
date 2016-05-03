@@ -128,7 +128,6 @@ class Simulator {
 				gem.parentGoal = goal;
 				this.gems.remove(gem);
 				this.finishedGems.push(gem);
-				trace(gem);
 				break;
 			}
 		}
