@@ -56,13 +56,13 @@ class PlayState extends FlxState {
 		}
 
         // Create control buttons
-        var forward:FlxButton = new FlxButton(100, FlxG.height - 70, "", this.onClickForward.bind(Control.FORWARD));
+        var forward:FlxButton = new FlxButton(100, FlxG.height - 70, "", this.onClickControl.bind(Control.FORWARD));
         forward.loadGraphic("assets/images/forward.png");
-        var left:FlxButton = new FlxButton(170, FlxG.height - 70, "", this.onClickLeft.bind(Control.LEFT));
+        var left:FlxButton = new FlxButton(170, FlxG.height - 70, "", this.onClickControl.bind(Control.LEFT));
         left.loadGraphic("assets/images/left.png");
-        var right:FlxButton = new FlxButton(240, FlxG.height - 70, "", this.onClickRight.bind(Control.RIGHT));
+        var right:FlxButton = new FlxButton(240, FlxG.height - 70, "", this.onClickControl.bind(Control.RIGHT));
         right.loadGraphic("assets/images/right.png");
-        var pause:FlxButton = new FlxButton(310, FlxG.height - 70, "", this.onClickPause.bind(Control.PAUSE));
+        var pause:FlxButton = new FlxButton(310, FlxG.height - 70, "", this.onClickControl.bind(Control.PAUSE));
         pause.loadGraphic("assets/images/pause.png");
 
         var play:FlxButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
@@ -94,6 +94,7 @@ class PlayState extends FlxState {
 		this.totalElapsed = this.totalElapsed + elapsed;
 		if (this.isPlaying && this.totalElapsed > PlayState.TICK_TIME) {
 			if (this.mainSimulator.tick()) {
+				trace("TICK");
 				this.spriteManager.update();
 			} else {
 				this.mainSimulator.reset();
