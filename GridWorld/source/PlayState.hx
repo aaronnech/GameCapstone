@@ -52,6 +52,8 @@ class PlayState extends FlxState {
 			add(sprite);
 		}
 
+		trace(sprites);
+
 		this.totalElapsed = 0;
 	}
 

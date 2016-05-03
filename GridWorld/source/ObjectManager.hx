@@ -62,6 +62,8 @@ class ObjectManager implements SpriteManager {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.x * tileSize + Y_OFFSET;
+            trace(map.get(o));
+            trace({x: newX, y:newY});
             FlxTween.tween(map.get(o), {x: newX, y:newY}, DURATION);
             // TODO: rotation
         }
