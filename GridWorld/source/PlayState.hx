@@ -84,6 +84,8 @@ class PlayState extends FlxState {
 			this.playButton.loadGraphic("assets/images/play.png");
 		} else {
 			this.playButton.loadGraphic("assets/images/stop.png");
+			this.mainSimulator.reset();
+			this.spriteManager.snap();
 		}
 	}
 
@@ -92,6 +94,7 @@ class PlayState extends FlxState {
 			this.controls.get(color).push(ctl);
 			trace(this.controls.get(color));
 		}
+		this.spriteManager.snap();
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -104,6 +107,7 @@ class PlayState extends FlxState {
 				this.spriteManager.update();
 			} else {
 				this.mainSimulator.reset();
+				this.spriteManager.snap();
 				this.isPlaying = false;
 			}
 			this.totalElapsed = 0;
