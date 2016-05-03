@@ -52,7 +52,6 @@ class Simulator {
 	}
 
 	public function onSetControls(controls:HashMap<Color, Array<Control>>) {
-		this.reset();
 		this.controls = controls;
 
 		this.controlIndices = new HashMap();
@@ -60,6 +59,7 @@ class Simulator {
 		for (color in controls.keys()) {
 			this.controlIndices.set(color, 0);
 		}
+		this.reset();
 	}
 
 	public function tick():Bool {

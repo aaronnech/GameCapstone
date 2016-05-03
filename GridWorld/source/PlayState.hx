@@ -12,14 +12,16 @@ import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.graphics.FlxGraphic;
+import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
-	private static var TICK_TIME:Int = 200;
+	private static var TICK_TIME:Float = 0.2;
 	private var level:Level;
 	private var mainSimulator:Simulator;
     private var spriteManager:ObjectManager;
 	private var tileMap:FlxTilemap;
 	private var totalElapsed:Float;
+	private var controls:HashMap<Color, Array<Control>>;
 
 	public function new(level:Level) {
 		super();
@@ -28,9 +30,14 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		this.controls = new HashMap();
+		for (color in this.level.getColors()) {
+			this.controls.set(color, new Array());
+		}
 
 		// FlxG.mouse.visible = false;
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
+		this.mainSimulator.onSetControls(this.controls);
 
 		// Background tile map
 		trace(this.level.getGrid());

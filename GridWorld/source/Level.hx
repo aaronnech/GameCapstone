@@ -67,6 +67,19 @@ class Level {
 		return vehicles;
 	}
 
+	public function getColors():Array<Color> {
+		var colors = new HashMap();
+		for (i in 0...this.json.objectData.length) {
+			var object = this.json.objectData[i];
+			if (object.attributes.type.indexOf('Vehicles') != -1) {
+				var color = Color.getColor(object.attributes.color);
+				colors.set(color, 0);
+			}
+		}
+
+		return [for (k in colors.keys()) k];
+	}
+
 	public function getGems():Array<Gem> {
 		var gems = new Array();
 		for (i in 0...this.json.objectData.length) {
