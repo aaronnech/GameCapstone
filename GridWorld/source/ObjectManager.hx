@@ -62,7 +62,7 @@ class ObjectManager implements SpriteManager {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.y * tileSize + Y_OFFSET;
-            FlxTween.tween(map.get(o), {x: newX, y:newY}, PlayState.TICK_TIME);
+            FlxTween.tween(map.get(o), {x: newX, y:newY}, PlayState.TICK_TIME / 2);
             // FlxTween.angle(map.get(o))
         }
     }
@@ -82,7 +82,9 @@ class ObjectManager implements SpriteManager {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.y * tileSize + Y_OFFSET;
-            map.get(o).setPosition(newX, newY);
+            var sprite = map.get(o);
+            sprite.setPosition(newX, newY);
+            sprite.visible = true;
         }
     }
 }
