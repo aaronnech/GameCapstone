@@ -14,6 +14,7 @@ class Simulator {
 	private var vehicles:HashMap<Color, Array<Vehicle>>;
 	private var goals:Array<Goal>;
 	private var gems:Array<Gem>;
+	private var finishedGems:Array<Gem>;
 
 	private var controls:HashMap<Color, Array<Control>>;
 	private var controlIndices:HashMap<Color, Int>;
@@ -28,6 +29,7 @@ class Simulator {
 
 		this.vehicles = level.getVehicles();
 		this.gems = level.getGems();
+		this.finishedGems = new Array();
 		this.goals = level.getGoals();
 	}
 
@@ -44,7 +46,7 @@ class Simulator {
 	}
 
 	public function getGems():Array<Gem> {
-		return this.gems;
+		return this.gems.concat(this.finishedGems);
 	}
 
 	public function getGoals():Array<Goal> {
@@ -106,7 +108,8 @@ class Simulator {
 						vehicle.undoControl(controls[index], this);
 					}
 
-					// TODO: Check for goal here
+					// Check if a gem is in a goal state
+					this.checkForGoalGems(gem);
 
 					break; // Assume that no two gems can be colliding with a car at once
 				}
@@ -115,6 +118,19 @@ class Simulator {
 
 		var allObjects:Array<Dynamic> = allVehicles.concat(this.gems);
 		return !checkCollisions(allObjects);
+	}
+
+	private function checkForGoalGems(gem:Gem) {
+		for (i in 0...this.goals.length) {
+			var goal = this.goals[i];
+			if (gem.x == goal.x && gem.y == goal.y) {
+				gem.isInGoal = true;
+				gem.parentGoal = goal;
+				this.gems.remove(gem);
+				this.finishedGems.push(gem);
+				break;
+			}
+		}
 	}
 
 	private function checkCollisions(objects:Array<Dynamic>):Bool {

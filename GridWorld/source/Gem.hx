@@ -4,10 +4,13 @@ import Color;
 
 class Gem extends Movable {
 	public var color:Color;
+	public var isInGoal:Bool;
+	public var parentGoal:Goal;
 
 	override public function new(id:Int, color:Color, x:Int, y:Int) {
 		super(id, x, y);
 		this.color = color;
+		this.isInGoal = false;
 	}
 
 	public function moveWithDirection(direction:Int, sim:Simulator):Bool {
