@@ -23,6 +23,7 @@ class PlayState extends FlxState {
 	private var totalElapsed:Float;
 	private var controls:HashMap<Color, Array<Control>>;
 	private var isPlaying:Bool;
+	private var playButton:FlxButton;
 
 	public function new(level:Level) {
 		super();
@@ -65,20 +66,25 @@ class PlayState extends FlxState {
         var pause:FlxButton = new FlxButton(310, FlxG.height - 70, "", this.onClickControl.bind(Control.PAUSE));
         pause.loadGraphic("assets/images/pause.png");
 
-        var play:FlxButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
-        play.loadGraphic("assets/images/play.png");
+        this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
+        this.playButton.loadGraphic("assets/images/play.png");
 
         add(forward);
         add(left);
         add(right);
         add(pause);
-        add(play);
+        add(this.playButton);
 
 		this.totalElapsed = 0;
 	}
 
 	private function onClickPlay():Void {
 		this.isPlaying = !this.isPlaying;
+		if (this.isPlaying) {
+			this.playButton.loadGraphic("assets/images/play.png");
+		} else {
+			this.playButton.loadGraphic("assets/images/pause.png");
+		}
 	}
 
 	private function onClickControl(ctl:Control):Void {
