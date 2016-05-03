@@ -1,5 +1,7 @@
 package;
 
+import GameObject;
+
 class Movable extends GameObject {
 	public var x:Int;
 	public var y:Int;
@@ -16,9 +18,17 @@ class Movable extends GameObject {
 		this.startingY = y;
 	}
 
-	public function updatePosition(deltaX:Int, deltaY:Int) {
-		this.x += deltaX;
-		this.y += deltaY;
+	public function updatePosition(deltaX:Int, deltaY:Int, sim:Simulator):Bool {
+		var x = this.x + deltaX;
+		var y = this.y + deltaY;
+
+		if (x >= 0 && y >= 0 && y < sim.height && x < sim.width) {
+			this.x += deltaX;
+			this.y += deltaY;
+			return true;
+		}
+
+		return false;
 	}
 
 	public function reset() {
