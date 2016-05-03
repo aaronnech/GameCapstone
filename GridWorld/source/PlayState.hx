@@ -10,6 +10,8 @@ import flixel.math.FlxVelocity;
 import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
+import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
+import flixel.graphics.FlxGraphic;
 
 class PlayState extends FlxState {
 	private var level:Level;
@@ -24,22 +26,16 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
-		FlxG.mouse.visible = false;
-		this.mainSimulator = new Simulator(28, 15, this.level);
-        this.spriteManager = new ObjectManager(this.mainSimulator, 20);
-        for (sprite in this.spriteManager.getSprites()) {
-            add(sprite);
-        }
-		// // Background tile map
-		// var str:String = '';
-		// for (arr in this.level.getGrid()) {
-		// 	for (num in arr) {
-		// 		str = str + num + ',';
-		// 	}
-		// }
-		// str = str.substr(0, str):String
-		// this.tileMap = new FlxTilemap();
-		// this.tileMap.loadMap(MapData:String, TileGraphic:Class, TileWidth:uint = 0, TileHeight:uint = 0, AutoTile:uint, StartingIndex:uint = 0, DrawIndex:uint = 1, CollideIndex:uint = 1)
+
+		// FlxG.mouse.visible = false;
+
+		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
+
+		// Background tile map
+		trace(this.level.getGrid());
+		this.tileMap = new FlxTilemap();
+		this.tileMap.loadMapFrom2DArray(this.level.getGrid(), "assets/images/backgroundtiles.png", 24, 24, FlxTilemapAutoTiling.OFF, 0, 0);
+		add(this.tileMap);
 	}
 
 	override public function update(elapsed:Float):Void {

@@ -29,6 +29,18 @@ class Level {
 		return this.json.objectData;
 	}
 
+	public function getWidth(): Int {
+		return this.json.width;
+	}
+
+	public function getHeight(): Int {
+		return this.json.height;
+	}
+
+	public function getTileSize(): Int {
+		return this.json.tileSize;
+	}
+
 	public function getVehicles():HashMap<Color, Array<Vehicle>> {
 		var vehicles = new HashMap();
 		for (i in 0...this.json.objectData.length) {
