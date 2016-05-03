@@ -52,7 +52,7 @@ class Level {
 					color,
 					object.x,
 					object.y,
-					object.orientation
+					object.attributes.orientation
 				);
 				idCounter += 1;
 
