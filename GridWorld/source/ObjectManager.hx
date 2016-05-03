@@ -7,7 +7,7 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
-    private static inline var DURATION = 2;
+    private static inline var DURATION = 1;
     private static inline var X_OFFSET = 10;
     private static inline var Y_OFFSET = 10;
 
@@ -61,9 +61,7 @@ class ObjectManager implements SpriteManager {
         for (i in 0...obj.length) {
             var o = obj[i];
             var newX = o.x * tileSize + X_OFFSET;
-            var newY = o.x * tileSize + Y_OFFSET;
-            trace(map.get(o));
-            trace({x: newX, y:newY});
+            var newY = o.y * tileSize + Y_OFFSET;
             FlxTween.tween(map.get(o), {x: newX, y:newY}, DURATION);
             // TODO: rotation
         }
