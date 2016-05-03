@@ -9,4 +9,14 @@ class Gem extends Movable {
 		super(id, x, y);
 		this.color = color;
 	}
+
+	public function moveWithDirection(direction:Int, sim:Simulator):Bool {
+		switch direction {
+			case 0: return this.updatePosition(0, -1, sim);
+			case 1: return this.updatePosition(1, 0, sim);
+			case 2: return this.updatePosition(0, 1, sim);
+			case 3: return this.updatePosition(-1, 0, sim);
+			default: return false;
+		}
+	}
 }

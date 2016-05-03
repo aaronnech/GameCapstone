@@ -16,43 +16,41 @@ class Turnable extends Movable {
 		this.startingDirection = direction;
 	}
 
-	public function updateWithControl(control:Control, sim:Simulator) {
+	public function updateWithControl(control:Control, sim:Simulator):Bool {
 		if (control == Control.FORWARD) {
-			this.updatePositionWithControl(control, sim, 1);
+			return this.updatePositionWithControl(control, sim, 1);
 		} else if (control == Control.LEFT) {
 			this.direction = (this.direction - 1) % NUM_POSSIBLE_DIRECTIONS;
+			return true;
 		} else if (control == Control.RIGHT) {
 			this.direction = (this.direction + 1) % NUM_POSSIBLE_DIRECTIONS;
+			return true;
 		}
+
+		return false;
 	}
 
-	public function undoControl(control:Control, sim:Simulator) {
+	public function undoControl(control:Control, sim:Simulator):Bool {
 		if (control == Control.FORWARD) {
-			this.updatePositionWithControl(control, sim, -1);
+			return this.updatePositionWithControl(control, sim, -1);
 		} else if (control == Control.LEFT) {
 			this.direction = (this.direction + 1) % NUM_POSSIBLE_DIRECTIONS;
+			return true;
 		} else if (control == Control.RIGHT) {
 			this.direction = (this.direction - 1) % NUM_POSSIBLE_DIRECTIONS;
+			return true;
 		}
+
+		return false;
 	}
 
-	private function updatePositionWithControl(control:Control, sim:Simulator, reverse:Int) {
+	private function updatePositionWithControl(control:Control, sim:Simulator, reverse:Int):Bool {
 		switch this.direction {
-			case 0: this.updatePosition(reverse * 0, reverse * -1, sim);
-			case 1: this.updatePosition(reverse * 1, reverse * 0, sim);
-			case 2: this.updatePosition(reverse * 0, reverse * 1, sim);
-			case 3: this.updatePosition(reverse * -1,reverse *  0, sim);
-		}
-	}
-
-	private function updatePosition(deltaX:Int, deltaY:Int, sim:Simulator) {
-		// TODO: Bounds checking
-		var x = this.x + deltaX;
-		var y = this.y + deltaY;
-
-		if (x >= 0 && y >= 0 && y < sim.height && x < sim.width) {
-			this.x += deltaX;
-			this.y += deltaY;
+			case 0: return this.updatePosition(0, reverse * -1, sim);
+			case 1: return this.updatePosition(reverse * 1, 0, sim);
+			case 2: return this.updatePosition(0, reverse * 1, sim);
+			case 3: return this.updatePosition(reverse * -1, 0, sim);
+			default: return false;
 		}
 	}
 

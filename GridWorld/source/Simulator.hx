@@ -15,8 +15,8 @@ class Simulator {
 	private var goals:Array<Goal>;
 	private var gems:Array<Gem>;
 
-	private var controls:Map<Color, Array<Control>>;
-	private var controlIndices:Map<Color, Int>;
+	private var controls:HashMap<Color, Array<Control>>;
+	private var controlIndices:HashMap<Color, Int>;
 
 	public function new(
 		width:Int,
@@ -53,32 +53,76 @@ class Simulator {
 		return this.goals;
 	}
 
-	public function onSetControls(controls:Map<Color, Array<Control>>) {
+	public function onSetControls(controls:HashMap<Color, Array<Control>>) {
 		this.reset();
 		this.controls = controls;
 
-		this.controlIndices = new Map();
+		this.controlIndices = new HashMap();
 
 		for (color in controls.keys()) {
-			this.controlIndices[color] = 0;
+			this.controlIndices.set(color, 0);
 		}
 	}
 
-	public function tick() {
+	public function tick():Bool {
 		for (color in this.controlIndices.keys()) {
-			var index = this.controlIndices[color];
-			var control = this.controls[color][index];
+			var index = this.controlIndices.get(color);
+			var control = this.controls.get(color)[index];
 
+			// Move the vehicles forward in time 1 step
 			for (i in 0...this.vehicles.get(color).length) {
 				this.vehicles.get(color)[i].updateWithControl(control, this);
 			}
 
-			this.controlIndices[color] += 1;
 			// Reset the index of the control back to the beginning if gone over
-			if (index >= this.controls[color].length) {
-				this.controlIndices[color] = 0;
+			if (index + 1 >= this.controls.get(color).length) {
+				this.controlIndices.set(color, 0);
+			} else {
+				this.controlIndices.set(color, index + 1);
 			}
 		}
+
+		// Check for collisions between cars
+		var allVehicles:Array<Dynamic> = this.getVehicles();
+		if (checkCollisions(allVehicles)) {
+			return false;
+		}
+
+		// Cars are clear, update gem positions
+		for (i in 0...allVehicles.length) {
+			var vehicle = allVehicles[i];
+			for (j in 0...this.gems.length) {
+				var gem = this.gems[j];
+				if (gem.x == vehicle.x && gem.y == vehicle.y) {
+					// Gem and car are overlapping -> advance the gem forward
+					if (gem.moveWithDirection(vehicle.direction, this)) {
+						// Gem collided with the wall: Undo the control on the
+						var controls = this.controls.get(vehicle.color);
+						var index = (this.controlIndices.get(vehicle.color) - 1) % controls.length;
+						vehicle.undoControl(controls[index], this);
+					}
+
+					// TODO: Check for goal here
+
+					break; // Assume that no two gems can be colliding with a car at once
+				}
+			}
+		}
+
+		var allObjects:Array<Dynamic> = allVehicles.concat(this.gems);
+		return !checkCollisions(allObjects);
+	}
+
+	private function checkCollisions(objects:Array<Dynamic>):Bool {
+		for (i in 0...objects.length) {
+			for (j in (i + 1)...objects.length) {
+				if (objects[i].x == objects[j].x && objects[i].y == objects[j].y) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public function reset() {
@@ -93,7 +137,7 @@ class Simulator {
 		}
 
 		for (color in this.controlIndices.keys()) {
-			this.controlIndices[color] = 0;
+			this.controlIndices.set(color, 0);
 		}
 	}
 
