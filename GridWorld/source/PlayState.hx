@@ -83,7 +83,7 @@ class PlayState extends FlxState {
 		if (this.isPlaying) {
 			this.playButton.loadGraphic("assets/images/play.png");
 		} else {
-			this.playButton.loadGraphic("assets/images/pause.png");
+			this.playButton.loadGraphic("assets/images/stop.png");
 		}
 	}
 
