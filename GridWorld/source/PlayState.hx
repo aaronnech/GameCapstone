@@ -22,6 +22,7 @@ class PlayState extends FlxState {
 	private var tileMap:FlxTilemap;
 	private var totalElapsed:Float;
 	private var controls:HashMap<Color, Array<Control>>;
+	private var isPlaying:Bool;
 
 	public function new(level:Level) {
 		super();
@@ -30,6 +31,8 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+
+		this.isPlaying = false;
 		this.controls = new HashMap();
 		for (color in this.level.getColors()) {
 			this.controls.set(color, new Array());
@@ -52,21 +55,52 @@ class PlayState extends FlxState {
 			add(sprite);
 		}
 
-		trace(sprites);
+        // Create control buttons
+        var forward:FlxButton = new FlxButton(100, FlxG.height - 70, "", this.onClickForward.bind(Control.FORWARD));
+        forward.loadGraphic("assets/images/forward.png");
+        var left:FlxButton = new FlxButton(170, FlxG.height - 70, "", this.onClickLeft.bind(Control.LEFT));
+        left.loadGraphic("assets/images/left.png");
+        var right:FlxButton = new FlxButton(240, FlxG.height - 70, "", this.onClickRight.bind(Control.RIGHT));
+        right.loadGraphic("assets/images/right.png");
+        var pause:FlxButton = new FlxButton(310, FlxG.height - 70, "", this.onClickPause.bind(Control.PAUSE));
+        pause.loadGraphic("assets/images/pause.png");
+
+        var play:FlxButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
+        play.loadGraphic("assets/images/play.png");
+
+        add(forward);
+        add(left);
+        add(right);
+        add(pause);
+        add(play);
 
 		this.totalElapsed = 0;
+	}
+
+	private function onClickPlay():Void {
+		this.isPlaying = !this.isPlaying;
+	}
+
+	private function onClickControl(ctl:Control):Void {
+		for (color in this.level.getColors()) {
+			this.controls.get(color).push(ctl);
+			trace(this.controls.get(color));
+		}
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		this.totalElapsed = this.totalElapsed + elapsed;
-		if (this.totalElapsed > PlayState.TICK_TIME) {
+		if (this.isPlaying && this.totalElapsed > PlayState.TICK_TIME) {
 			if (this.mainSimulator.tick()) {
 				this.spriteManager.update();
 			} else {
 				this.mainSimulator.reset();
+				this.isPlaying = false;
 			}
+			this.totalElapsed = 0;
+		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
 		}
 	}

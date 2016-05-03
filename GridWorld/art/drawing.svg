@@ -265,7 +265,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="404.09075"
+     inkscape:cx="341.23361"
      inkscape:cy="887.05577"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -283,7 +283,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -298,7 +298,10 @@
        height="90.913727"
        x="236.37569"
        y="129.13354"
-       ry="0" />
+       ry="0"
+       inkscape:export-filename="/home/aaron/Dropbox/School/CLASSES/2015-2016/SPRING/CSE481/Project/GridWorld/assets/images/backgroundtiles.png"
+       inkscape:export-xdpi="22.520247"
+       inkscape:export-ydpi="22.520247" />
     <rect
        style="opacity:1;fill:#ff2a2a;fill-opacity:1;stroke:#4d4d4d;stroke-width:5;stroke-miterlimit:3.1;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect3336-8"
@@ -307,6 +310,9 @@
        x="330.89349"
        y="129.13354"
        ry="0"
-       inkscape:transform-center-x="-212.13203" />
+       inkscape:transform-center-x="-212.13203"
+       inkscape:export-filename="/home/aaron/Dropbox/School/CLASSES/2015-2016/SPRING/CSE481/Project/GridWorld/assets/images/backgroundtiles.png"
+       inkscape:export-xdpi="22.520247"
+       inkscape:export-ydpi="22.520247" />
   </g>
 </svg>
