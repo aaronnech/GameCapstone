@@ -67,6 +67,7 @@ class PlayState extends FlxState {
         pause.loadGraphic("assets/images/pause.png");
 
         this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
+		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
         add(forward);
