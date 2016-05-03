@@ -8,8 +8,8 @@ import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
     private static inline var DURATION = 1;
-    private static inline var X_OFFSET = 10;
-    private static inline var Y_OFFSET = 10;
+    private static inline var X_OFFSET = 24;
+    private static inline var Y_OFFSET = 24;
 
     private var tileSize:Int;
     private var simulator:Simulator;
@@ -63,11 +63,26 @@ class ObjectManager implements SpriteManager {
             var newX = o.x * tileSize + X_OFFSET;
             var newY = o.y * tileSize + Y_OFFSET;
             FlxTween.tween(map.get(o), {x: newX, y:newY}, DURATION);
-            // TODO: rotation
+            // FlxTween.angle(map.get(o))
         }
     }
 
     public function setSimulator(s:Dynamic) {
         this.simulator = s;
+    }
+
+    public function snap() {
+        snapSprite(this.vehicles, this.simulator.getVehicles());
+        snapSprite(this.gems, this.simulator.getGems());
+        snapSprite(this.goals, this.simulator.getGoals());
+    }
+
+    private function snapSprite(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>) {
+        for (i in 0...obj.length) {
+            var o = obj[i];
+            var newX = o.x * tileSize + X_OFFSET;
+            var newY = o.y * tileSize + Y_OFFSET;
+            map.get(o).setPosition(newX, newY);
+        }
     }
 }
