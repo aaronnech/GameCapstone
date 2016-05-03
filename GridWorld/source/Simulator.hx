@@ -29,8 +29,6 @@ class Simulator {
 		this.vehicles = level.getVehicles();
 		this.gems = level.getGems();
 		this.goals = level.getGoals();
-
-		this.getVehicles();
 	}
 
 	public function getVehicles():Array<Vehicle> {

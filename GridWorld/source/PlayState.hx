@@ -17,6 +17,7 @@ class PlayState extends FlxState {
 	private static var TICK_TIME:Int = 200;
 	private var level:Level;
 	private var mainSimulator:Simulator;
+    private var spriteManager:ObjectManager;
 	private var tileMap:FlxTilemap;
 	private var totalElapsed:Float;
 
@@ -27,6 +28,7 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+
 		// FlxG.mouse.visible = false;
 
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
