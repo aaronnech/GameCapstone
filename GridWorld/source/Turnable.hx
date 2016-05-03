@@ -21,6 +21,10 @@ class Turnable extends Movable {
 			return this.updatePositionWithControl(control, sim, 1);
 		} else if (control == Control.LEFT) {
 			this.direction = (this.direction - 1) % NUM_POSSIBLE_DIRECTIONS;
+			if (this.direction == -1) {
+				this.direction = NUM_POSSIBLE_DIRECTIONS - 1;
+			}
+
 			return true;
 		} else if (control == Control.RIGHT) {
 			this.direction = (this.direction + 1) % NUM_POSSIBLE_DIRECTIONS;
@@ -38,6 +42,10 @@ class Turnable extends Movable {
 			return true;
 		} else if (control == Control.RIGHT) {
 			this.direction = (this.direction - 1) % NUM_POSSIBLE_DIRECTIONS;
+			if (this.direction == -1) {
+				this.direction = NUM_POSSIBLE_DIRECTIONS - 1;
+			}
+
 			return true;
 		}
 

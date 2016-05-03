@@ -82,9 +82,9 @@ class PlayState extends FlxState {
 	private function onClickPlay():Void {
 		this.isPlaying = !this.isPlaying;
 		if (this.isPlaying) {
-			this.playButton.loadGraphic("assets/images/play.png");
-		} else {
 			this.playButton.loadGraphic("assets/images/stop.png");
+		} else {
+			this.playButton.loadGraphic("assets/images/play.png");
 			this.mainSimulator.reset();
 			this.spriteManager.snap();
 		}
