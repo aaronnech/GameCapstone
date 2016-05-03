@@ -15,7 +15,7 @@ import flixel.graphics.FlxGraphic;
 import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
-	private static var TICK_TIME:Float = 0.2;
+	private static var TICK_TIME:Float = 1.0;
 	private var level:Level;
 	private var mainSimulator:Simulator;
     private var spriteManager:ObjectManager;
