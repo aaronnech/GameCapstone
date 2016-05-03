@@ -3,6 +3,7 @@ package;
 import haxe.ds.HashMap;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
@@ -22,15 +23,17 @@ class ObjectManager implements SpriteManager {
         this.vehicles = new HashMap();
         this.gems = new HashMap();
         this.goals = new HashMap();
-        makeSprites(this.vehicles, this.simulator.getVehicles());
-        makeSprites(this.gems, this.simulator.getGems());
-        makeSprites(this.goals, this.simulator.getGoals());
+        makeSprites(this.vehicles, this.simulator.getVehicles(), 0xff0000);
+        makeSprites(this.gems, this.simulator.getGems(), 0x00ff00);
+        makeSprites(this.goals, this.simulator.getGoals(), 0x0000ff);
     }
 
-    private function makeSprites(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>) {
+    private function makeSprites(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>, color:FlxColor) {
         for (i in 0...obj.length) {
             var o = obj[i];
-            map.set(o, new FlxSprite(o.x * tileSize + X_OFFSET, o.y * tileSize + Y_OFFSET));
+            var sprite = new FlxSprite(o.x * tileSize + X_OFFSET, o.y * tileSize + Y_OFFSET);
+            sprite.makeGraphic(this.tileSize, this.tileSize, color);
+            map.set(o, sprite);
         }
     }
 
