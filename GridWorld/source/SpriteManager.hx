@@ -3,7 +3,7 @@ package ;
 import flixel.FlxSprite;
 
 interface SpriteManager {
-	public function getSprites():List<FlxSprite>;
+	public function getSprites():Array<FlxSprite>;
 	public function update():Void;
-	public function setSimulator(s:Dynamic);
+	public function setSimulator(s:Dynamic):Void;
 }

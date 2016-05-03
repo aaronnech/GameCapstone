@@ -14,6 +14,7 @@ import flixel.tile.FlxTilemap;
 class PlayState extends FlxState {
 	private var level:Level;
 	private var mainSimulator:Simulator;
+    private var spriteManager:ObjectManager;
 	private var tileMap:FlxTilemap;
 
 	public function new(level:Level) {
@@ -24,9 +25,11 @@ class PlayState extends FlxState {
 	override public function create():Void {
 		super.create();
 		FlxG.mouse.visible = false;
-
 		this.mainSimulator = new Simulator(28, 15, this.level);
-
+        this.spriteManager = new ObjectManager(this.mainSimulator, 20);
+        for (sprite in this.spriteManager.getSprites()) {
+            add(sprite);
+        }
 		// // Background tile map
 		// var str:String = '';
 		// for (arr in this.level.getGrid()) {
