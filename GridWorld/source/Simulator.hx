@@ -55,7 +55,6 @@ class Simulator {
 		this.controls = controls;
 
 		this.controlIndices = new HashMap();
-
 		for (color in controls.keys()) {
 			this.controlIndices.set(color, 0);
 		}
