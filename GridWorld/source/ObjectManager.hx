@@ -23,9 +23,9 @@ class ObjectManager implements SpriteManager {
         this.vehicles = new HashMap();
         this.gems = new HashMap();
         this.goals = new HashMap();
-        makeSprites(this.vehicles, this.simulator.getVehicles(), 0xff0000);
-        makeSprites(this.gems, this.simulator.getGems(), 0x00ff00);
-        makeSprites(this.goals, this.simulator.getGoals(), 0x0000ff);
+        makeSprites(this.vehicles, this.simulator.getVehicles(), FlxColor.CYAN);
+        makeSprites(this.gems, this.simulator.getGems(), FlxColor.MAGENTA);
+        makeSprites(this.goals, this.simulator.getGoals(), FlxColor.RED);
     }
 
     private function makeSprites(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>, color:FlxColor) {
