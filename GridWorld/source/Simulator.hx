@@ -72,12 +72,12 @@ class Simulator {
 			// Move the vehicles forward in time 1 step
 			var control = controls[index];
 			var vehicles = this.vehicles.get(color);
-			for (i in 0....vehicles.length) {
+			for (i in 0...vehicles.length) {
 				vehicles[i].updateWithControl(control, this);
 			}
 
 			// Reset the index of the control back to the beginning if gone over
-			if (index + 1 >= .length) {
+			if (index + 1 >= controls.length) {
 				this.controlIndices.set(color, 0);
 			} else {
 				this.controlIndices.set(color, index + 1);
