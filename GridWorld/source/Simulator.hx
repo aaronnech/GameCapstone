@@ -55,7 +55,6 @@ class Simulator {
 		this.controls = controls;
 
 		this.controlIndices = new HashMap();
-
 		for (color in controls.keys()) {
 			this.controlIndices.set(color, 0);
 		}
@@ -65,15 +64,20 @@ class Simulator {
 	public function tick():Bool {
 		for (color in this.controlIndices.keys()) {
 			var index = this.controlIndices.get(color);
-			var control = this.controls.get(color)[index];
+			var controls = this.controls.get(color);
+			if (controls.length == 0) {
+				continue;
+			}
 
 			// Move the vehicles forward in time 1 step
-			for (i in 0...this.vehicles.get(color).length) {
-				this.vehicles.get(color)[i].updateWithControl(control, this);
+			var control = controls[index];
+			var vehicles = this.vehicles.get(color);
+			for (i in 0....vehicles.length) {
+				vehicles[i].updateWithControl(control, this);
 			}
 
 			// Reset the index of the control back to the beginning if gone over
-			if (index + 1 >= this.controls.get(color).length) {
+			if (index + 1 >= .length) {
 				this.controlIndices.set(color, 0);
 			} else {
 				this.controlIndices.set(color, index + 1);
