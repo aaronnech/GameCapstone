@@ -110,7 +110,6 @@ class Simulator {
 
 					// Check if a gem is in a goal state
 					this.checkForGoalGems(gem);
-
 					break; // Assume that no two gems can be colliding with a car at once
 				}
 			}
