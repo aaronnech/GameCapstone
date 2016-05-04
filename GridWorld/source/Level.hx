@@ -2,6 +2,8 @@ package;
 
 import Vehicle;
 import Color;
+import Wall;
+import Gem;
 
 import haxe.ds.HashMap;
 
@@ -18,7 +20,7 @@ class Level {
 	public function load() {
 		var s = openfl.Assets.getText(this.name);
 		this.json = haxe.Json.parse(s);
-		trace(this.json.objectData);
+		// trace(this.json.objectData);
 	}
 
 	public function getGrid() {
@@ -108,5 +110,20 @@ class Level {
 		}
 
 		return goals;
+	}
+
+	public function getWalls():Array<Wall> {
+		var walls = new Array();
+		for (row in 0...this.json.tileData.length) {
+			for (col in 0...this.json.tileData[row].length) {
+				if (this.json.tileData[row][col] == 1) {
+					var wall = new Wall(idCounter, col, row);
+					walls.push(wall);
+					idCounter += 1;
+				}
+			}
+		}
+
+		return walls;
 	}
 }

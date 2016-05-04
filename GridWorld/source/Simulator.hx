@@ -31,7 +31,7 @@ class Simulator {
 
 		this.vehicles = level.getVehicles();
 		this.gems = level.getGems();
-		// this.walls = level.getWalls();
+		this.walls = level.getWalls();
 		this.finishedGems = new Array();
 		this.goals = level.getGoals();
 	}

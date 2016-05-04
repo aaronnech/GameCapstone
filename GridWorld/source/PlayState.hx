@@ -44,7 +44,7 @@ class PlayState extends FlxState {
 		this.mainSimulator.onSetControls(this.controls);
 
 		// Background tile map
-		trace(this.level.getGrid());
+		// trace(this.level.getGrid());
 		this.tileMap = new FlxTilemap();
 		this.tileMap.loadMapFrom2DArray(this.level.getGrid(), "assets/images/backgroundtiles.png", 24, 24, FlxTilemapAutoTiling.OFF, 0, 0);
 		add(this.tileMap);
