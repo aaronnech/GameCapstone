@@ -60,7 +60,7 @@ class Simulator {
 		return this.walls;
 	}
 
-	public function getControlIndicies():HashMap<Color, Int> {
+	public function getControlIndices():HashMap<Color, Int> {
 		return this.controlIndices;
 	}
 
