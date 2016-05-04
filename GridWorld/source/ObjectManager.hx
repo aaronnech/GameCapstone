@@ -8,8 +8,8 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
-    private static inline var X_OFFSET = 24;
-    private static inline var Y_OFFSET = 24;
+    private static inline var X_OFFSET = 0;
+    private static inline var Y_OFFSET = 0;
 
     private var tileSize:Int;
     private var simulator:Simulator;
@@ -85,12 +85,11 @@ class ObjectManager implements SpriteManager {
                 if (diff == 1 || diff == -3) {
                     // Turn right
                     FlxTween.angle(sprite, 0, 90, PlayState.TICK_TIME / 2);
-                    sprite.facing = getDirection(o.direction);
                 } else if (diff == -1 || diff == 3) {
                     // Turn left
                     FlxTween.angle(sprite, 0, -90, PlayState.TICK_TIME / 2);
-                    sprite.facing = getDirection(o.direction);
                 }
+                sprite.facing = getDirection(o.direction);
             }
         }
     }
@@ -133,6 +132,11 @@ class ObjectManager implements SpriteManager {
             var newY = o.y * tileSize + Y_OFFSET;
             var sprite = map.get(o);
             sprite.setPosition(newX, newY);
+
+            if (Std.is(o, Vehicle)) {
+                sprite.facing = getDirection(o.direction);
+            }
+
             sprite.visible = true;
         }
     }
