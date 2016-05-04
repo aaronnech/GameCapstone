@@ -9,6 +9,7 @@ class Color {
 	}
 
 	public static function getColor(color:String) {
+		color = color.toLowerCase();
 		if (!singletons.exists(color)) {
 			singletons[color] = new Color(color);
 		}
