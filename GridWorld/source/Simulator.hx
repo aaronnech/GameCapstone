@@ -48,7 +48,7 @@ class Simulator {
 		return result;
 	}
 
-	public function isGameOver():Bool {
+	public function didUserWin():Bool {
 		return this.gems.length == 0;
 	}
 
