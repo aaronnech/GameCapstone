@@ -56,6 +56,10 @@ class Simulator {
 		return this.goals;
 	}
 
+	public function getWalls():Array<Wall> {
+		return this.walls;
+	}
+
 	public function onSetControls(controls:HashMap<Color, Array<Control>>) {
 		this.controls = controls;
 
