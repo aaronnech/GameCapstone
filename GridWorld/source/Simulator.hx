@@ -48,6 +48,10 @@ class Simulator {
 		return result;
 	}
 
+	public function didUserWin():Bool {
+		return this.gems.length == 0;
+	}
+
 	public function getGems():Array<Gem> {
 		return this.gems.concat(this.finishedGems);
 	}
