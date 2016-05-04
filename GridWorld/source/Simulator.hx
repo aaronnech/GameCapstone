@@ -60,6 +60,10 @@ class Simulator {
 		return this.walls;
 	}
 
+	public function getControlIndicies():HashMap<Color, Int> {
+		return this.controlIndices;
+	}
+
 	public function onSetControls(controls:HashMap<Color, Array<Control>>) {
 		this.controls = controls;
 
@@ -67,6 +71,7 @@ class Simulator {
 		for (color in controls.keys()) {
 			this.controlIndices.set(color, 0);
 		}
+
 		this.reset();
 	}
 
