@@ -4,6 +4,7 @@ import Control;
 import Vehicle;
 import Goal;
 import Gem;
+import Wall;
 
 import haxe.ds.HashMap;
 
@@ -13,6 +14,7 @@ class Simulator {
 
 	private var vehicles:HashMap<Color, Array<Vehicle>>;
 	private var goals:Array<Goal>;
+	private var walls:Array<Wall>;
 	private var gems:Array<Gem>;
 	private var finishedGems:Array<Gem>;
 
@@ -29,6 +31,7 @@ class Simulator {
 
 		this.vehicles = level.getVehicles();
 		this.gems = level.getGems();
+		// this.walls = level.getWalls();
 		this.finishedGems = new Array();
 		this.goals = level.getGoals();
 	}
@@ -151,14 +154,14 @@ class Simulator {
 			}
 		}
 
-		for (i in 0...gems.length) {
-			gems[i].reset();
+		this.gems = this.gems.concat(this.finishedGems);
+		this.finishedGems = new Array();
+		for (i in 0...this.gems.length) {
+			this.gems[i].reset();
 		}
 
 		for (color in this.controlIndices.keys()) {
 			this.controlIndices.set(color, 0);
 		}
 	}
-
-
 }
