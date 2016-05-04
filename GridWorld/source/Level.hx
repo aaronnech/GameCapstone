@@ -40,7 +40,7 @@ class Level {
 	}
 
 	public function getTileSize(): Int {
-		return this.json.tileSize;
+		return 32;
 	}
 
 	public function getVehicles():HashMap<Color, Array<Vehicle>> {

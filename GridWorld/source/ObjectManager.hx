@@ -8,8 +8,8 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 
 class ObjectManager implements SpriteManager {
-    private static inline var X_OFFSET = 0;
-    private static inline var Y_OFFSET = 0;
+    public var xOffset:Int = 0;
+    public var yOffset:Int = 0;
 
     private var tileSize:Int;
     private var simulator:Simulator;
@@ -23,6 +23,9 @@ class ObjectManager implements SpriteManager {
         this.vehicles = new HashMap();
         this.gems = new HashMap();
         this.goals = new HashMap();
+    }
+
+    public function generate() {
         makeSprites(this.vehicles, this.simulator.getVehicles(), FlxColor.CYAN);
         makeSprites(this.gems, this.simulator.getGems(), FlxColor.MAGENTA);
         makeSprites(this.goals, this.simulator.getGoals(), FlxColor.RED);
@@ -31,14 +34,30 @@ class ObjectManager implements SpriteManager {
     private function makeSprites(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>, color:FlxColor) {
         for (i in 0...obj.length) {
             var o = obj[i];
-            var sprite = new FlxSprite(o.x * tileSize + X_OFFSET, o.y * tileSize + Y_OFFSET);
+            var sprite = new FlxSprite(o.x * tileSize + xOffset, o.y * tileSize + yOffset);
 
             // Set direction of vehicle sprites.
             if (Std.is(o, Vehicle)) {
                 sprite.facing = getDirection(o.direction);
+                if (o.color.color == 'blue') {
+                    sprite.loadGraphic('assets/images/bluedoser.png');
+                } else if (o.color.color == 'red') {
+                    sprite.loadGraphic('assets/images/yellowdoser.png');
+                }
+            } else if (Std.is(o, Gem)) {
+                if (o.color.color == 'blue') {
+                    sprite.loadGraphic('assets/images/bluegem.png');
+                } else if (o.color.color == 'red') {
+                    sprite.loadGraphic('assets/images/yellowgem.png');
+                }
+            } else if (Std.is(o, Goal)) {
+                if (o.color.color == 'blue') {
+                    sprite.loadGraphic('assets/images/blueflag.png');
+                } else if (o.color.color == 'red') {
+                    sprite.loadGraphic('assets/images/yellowflag.png');
+                }
             }
 
-            sprite.makeGraphic(this.tileSize, this.tileSize, color);
             map.set(o, sprite);
         }
     }
@@ -67,8 +86,8 @@ class ObjectManager implements SpriteManager {
     private function updateSprite(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>) {
         for (i in 0...obj.length) {
             var o = obj[i];
-            var newX = o.x * tileSize + X_OFFSET;
-            var newY = o.y * tileSize + Y_OFFSET;
+            var newX = o.x * tileSize + xOffset;
+            var newY = o.y * tileSize + yOffset;
             var sprite = map.get(o);
             FlxTween.tween(sprite, {x: newX, y:newY}, PlayState.TICK_TIME / 2);
 
@@ -81,17 +100,29 @@ class ObjectManager implements SpriteManager {
                     case FlxObject.DOWN: diff -= 2;
                     case FlxObject.LEFT: diff -= 3;
                 }
+                var from = this.getFaceAngle(sprite.facing);
 
                 if (diff == 1 || diff == -3) {
                     // Turn right
-                    FlxTween.angle(sprite, 0, 90, PlayState.TICK_TIME / 2);
+                    FlxTween.angle(sprite, from, from + 90, PlayState.TICK_TIME / 2);
                 } else if (diff == -1 || diff == 3) {
                     // Turn left
-                    FlxTween.angle(sprite, 0, -90, PlayState.TICK_TIME / 2);
+                    FlxTween.angle(sprite, from, from - 90, PlayState.TICK_TIME / 2);
                 }
                 sprite.facing = getDirection(o.direction);
             }
         }
+    }
+
+    private function getFaceAngle(ang:Int): Int {
+        switch ang {
+            case FlxObject.UP: return 90;
+            case FlxObject.RIGHT: return 180;
+            case FlxObject.DOWN: return 270;
+            case FlxObject.LEFT: return 0;
+        }
+
+        return 0;
     }
 
     private function getDirection(i:Int):Int {
@@ -128,8 +159,8 @@ class ObjectManager implements SpriteManager {
     private function snapSprite(map:HashMap<Dynamic, FlxSprite>, obj:Array<Dynamic>) {
         for (i in 0...obj.length) {
             var o = obj[i];
-            var newX = o.x * tileSize + X_OFFSET;
-            var newY = o.y * tileSize + Y_OFFSET;
+            var newX = o.x * tileSize + xOffset;
+            var newY = o.y * tileSize + yOffset;
             var sprite = map.get(o);
             sprite.setPosition(newX, newY);
 

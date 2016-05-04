@@ -46,16 +46,34 @@ class PlayState extends FlxState {
 		// Background tile map
 		// trace(this.level.getGrid());
 		this.tileMap = new FlxTilemap();
-		this.tileMap.loadMapFrom2DArray(this.level.getGrid(), "assets/images/backgroundtiles.png", 24, 24, FlxTilemapAutoTiling.OFF, 0, 0);
-		add(this.tileMap);
+		this.tileMap.loadMapFrom2DArray(
+			this.level.getGrid(),
+			"assets/images/backgroundtiles.png",
+			this.level.getTileSize(),
+			this.level.getTileSize(),
+			FlxTilemapAutoTiling.OFF, 0, 0
+		);
+		this.tileMap.x = 20;
+		this.tileMap.y = 20;
+		this.add(this.tileMap);
 
 		// Objects
 		this.spriteManager = new ObjectManager(this.mainSimulator, this.level.getTileSize());
+		this.spriteManager.xOffset = 20;
+		this.spriteManager.yOffset = 20;
+		this.spriteManager.generate();
 		var sprites = this.spriteManager.getSprites();
 		for (sprite in sprites) {
-			add(sprite);
+			this.add(sprite);
 		}
 
+		// UI
+		this.createUI();
+
+		this.totalElapsed = 0;
+	}
+
+	private function createUI():Void {
         // Create control buttons
         var forward:FlxButton = new FlxButton(100, FlxG.height - 70, "", this.onClickControl.bind(Control.FORWARD));
         forward.loadGraphic("assets/images/forward.png");
@@ -75,8 +93,6 @@ class PlayState extends FlxState {
         add(right);
         add(pause);
         add(this.playButton);
-
-		this.totalElapsed = 0;
 	}
 
 	private function onClickPlay():Void {
