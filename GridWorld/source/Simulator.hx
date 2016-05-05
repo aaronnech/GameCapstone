@@ -49,7 +49,12 @@ class Simulator {
 	}
 
 	public function getScore():Int {
-		return 0;
+		var score = 0.0;
+		for (color in this.controls.keys()) {
+			score += this.controls.get(color).length;
+		}
+
+		return Std.int(score / 100.0);
 	}
 
 	public function didUserWin():Bool {
