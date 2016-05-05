@@ -18,6 +18,7 @@ class LevelCompleteState extends FlxState {
 
 	public function new(levels:Array<Level>, nextIndex:Int, score:Int) {
 		super();
+		AnalyticsAPI.emitEvent('progress', 'levels', 'completed', nextIndex - 1);
 		this.levels = levels;
 		this.nextIndex = nextIndex;
 		this.score = score;
@@ -67,14 +68,17 @@ class LevelCompleteState extends FlxState {
 	}
 
 	private function clickNext():Void {
+		AnalyticsAPI.emitEvent('navigation', 'levelcomplete', 'next', this.nextIndex - 1);
 		FlxG.switchState(new PlayState(this.levels, this.nextIndex));
 	}
 
 	private function clickBack():Void {
+		AnalyticsAPI.emitEvent('navigation', 'levelcomplete', 'levelselectstate', this.nextIndex - 1);
 		FlxG.switchState(new LevelSelectState());
 	}
 
 	private function clickRedo():Void {
+		AnalyticsAPI.emitEvent('navigation', 'levelcomplete', 'redo', this.nextIndex - 1);
 		FlxG.switchState(new PlayState(this.levels, this.nextIndex - 1));
 	}
 }

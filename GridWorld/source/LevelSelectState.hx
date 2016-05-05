@@ -49,7 +49,10 @@ class LevelSelectState extends FlxState
 
 	private function startLevel(index:Int):Void {
 		if (this.save.data.highestLevel >= index) {
+			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'playstate', index);
 			FlxG.switchState(new PlayState(this.levels, index));
+		} else {
+			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'disabledplaystate', index);
 		}
 	}
 
@@ -115,8 +118,10 @@ class LevelSelectState extends FlxState
 	}
 
 	private function onChangePage(delta:Int) {
+		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageChange', this.delta);
 		this.currentPage += delta;
 		this.updateNextPrevious();
+		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageSet', this.currentPage);
 	}
 
 	override public function create():Void {
@@ -156,6 +161,7 @@ class LevelSelectState extends FlxState
 	}
 
 	private function clickBack():Void {
+		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'mainMenu');
 		FlxG.switchState(new MenuState());
 	}
 

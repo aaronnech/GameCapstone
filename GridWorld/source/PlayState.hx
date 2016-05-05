@@ -30,6 +30,7 @@ class PlayState extends FlxState {
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
+		AnalyticsAPI.emitEvent('progress', 'levels', 'start', cur);
 		this.level = levels[cur];
 		this.levels = levels;
 	}
@@ -94,6 +95,7 @@ class PlayState extends FlxState {
 
 	private function onClickBack() {
 		FlxG.switchState(new LevelSelectState());
+		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back');
 	}
 
 	private function onClickPlay():Void {
