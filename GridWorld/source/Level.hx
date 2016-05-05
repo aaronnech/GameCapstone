@@ -4,6 +4,7 @@ import Vehicle;
 import Color;
 import Wall;
 import Gem;
+import Control;
 
 import haxe.ds.HashMap;
 
@@ -43,6 +44,28 @@ class Level {
 
 	public function getTileSize(): Int {
 		return 32;
+	}
+
+	public function getBannedControls():Array<Control> {
+		if (!this.json.banned) {
+			return new Array();
+		}
+
+		var bannedControls = new Array();
+		for (i in 0...this.json.banned.length) {
+			var bannedControl = this.json.banned[i];
+			if (bannedControl == 'FORWARD') {
+				bannedControls.push(Control.FORWARD);
+			} else if (bannedControl == 'LEFT') {
+				bannedControls.push(Control.LEFT);
+			} else if (bannedControl == 'RIGHT') {
+				bannedControls.push(Control.RIGHT);
+			} else if (bannedControl == 'PAUSE') {
+				bannedControls.push(Control.PAUSE);
+			}
+		}
+
+		return bannedControls;
 	}
 
 	public function getVehicles():HashMap<Color, Array<Vehicle>> {

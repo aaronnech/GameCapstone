@@ -48,6 +48,10 @@ class Simulator {
 		return result;
 	}
 
+	public function getScore():Int {
+		return 0;
+	}
+
 	public function didUserWin():Bool {
 		return this.gems.length == 0;
 	}
@@ -138,11 +142,12 @@ class Simulator {
 	private function checkForGoalGems(gem:Gem) {
 		for (i in 0...this.goals.length) {
 			var goal = this.goals[i];
-			if (gem.x == goal.x && gem.y == goal.y) {
+			if (gem.color == goal.color && gem.x == goal.x && gem.y == goal.y) {
 				gem.isInGoal = true;
 				gem.parentGoal = goal;
 				this.gems.remove(gem);
 				this.finishedGems.push(gem);
+				trace('GOAL');
 				break;
 			}
 		}
