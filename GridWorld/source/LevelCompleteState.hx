@@ -20,6 +20,7 @@ class LevelCompleteState extends FlxState {
 		super();
 		this.levels = levels;
 		this.nextIndex = nextIndex;
+		this.score = score;
 
 		var save = new FlxSave();
 		save.bind("Game");
@@ -58,6 +59,7 @@ class LevelCompleteState extends FlxState {
 		add(back);
 
 		var scoreText = new FlxText(0, 0);
+		scoreText.size = 20;
 		scoreText.text = "Score: " + this.score;
 		scoreText.screenCenter();
 		scoreText.y = scoreText.y - 70;
