@@ -27,10 +27,12 @@ class LevelCompleteState extends FlxState {
 		var backdrop = new FlxBackdrop('assets/images/playbg.png');
 		add(backdrop);
 
-		var next = new FlxButton(0, 0, "Next Level", clickNext);
-		next.screenCenter();
-		next.x += 50;
-		add(next);
+		if (this.nextIndex < this.levels.length) {
+			var next = new FlxButton(0, 0, "Next Level", clickNext);
+			next.screenCenter();
+			next.x += 50;
+			add(next);
+		}
 
 		var redo = new FlxButton(0, 0, "Redo", clickRedo);
 		redo.screenCenter();
