@@ -39,6 +39,7 @@ class ObjectManager implements SpriteManager {
             // Set direction of vehicle sprites.
             if (Std.is(o, Vehicle)) {
                 sprite.facing = getDirection(o.direction);
+                sprite.angle = getFaceAngle(getDirection(o.direction));
                 if (o.color.color == 'blue') {
                     sprite.loadGraphic('assets/images/bluedoser.png');
                 } else if (o.color.color == 'red') {
