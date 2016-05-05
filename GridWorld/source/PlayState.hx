@@ -145,6 +145,8 @@ class PlayState extends FlxState {
 		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
 			this.controlManager.resetControlHighlights();
+			this.mainSimulator.reset();
+			this.spriteManager.snap();
 		}
 	}
 }
