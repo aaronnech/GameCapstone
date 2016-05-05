@@ -39,9 +39,10 @@ class LevelCompleteState extends FlxState {
 		add(backdrop);
 
 		if (this.nextIndex < this.levels.length) {
-			var next = new FlxButton(0, 0, "Next Level", clickNext);
+			var next = new FlxButton(0, 0, "", clickNext);
+			next.loadGraphic('assets/images/next.png');
 			next.screenCenter();
-			next.x += 70;
+			next.x += 100;
 			add(next);
 		}
 
@@ -52,7 +53,7 @@ class LevelCompleteState extends FlxState {
 
 		var back = new FlxButton(0, 0, "", clickBack);
 		back.loadGraphic('assets/images/back.png');
-		back.x -= 70;
+		back.x -= 100;
 		back.screenCenter();
 		add(back);
 
