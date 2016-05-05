@@ -28,6 +28,7 @@ class LevelCompleteState extends FlxState {
 		}
 
 		save.data.highestLevel = Math.max(nextIndex, save.data.highestLevel);
+		save.flush();
 	}
 
 	override public function create():Void {
