@@ -53,8 +53,8 @@ class LevelCompleteState extends FlxState {
 
 		var back = new FlxButton(0, 0, "", clickBack);
 		back.loadGraphic('assets/images/back.png');
-		back.x -= 100;
 		back.screenCenter();
+		back.x -= 100;
 		add(back);
 
 		var scoreText = new FlxText(0, 0);
