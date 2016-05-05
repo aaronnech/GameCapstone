@@ -21,6 +21,7 @@ class PlayState extends FlxState {
 	private var level:Level;
 	private var mainSimulator:Simulator;
     private var spriteManager:ObjectManager;
+    private var controlManager:ControlManager;
 	private var tileMap:FlxTilemap;
 	private var totalElapsed:Float;
 	private var controls:HashMap<Color, Array<Control>>;
@@ -39,17 +40,16 @@ class PlayState extends FlxState {
 		add(backdrop);
 
 		this.isPlaying = false;
-		this.controls = new HashMap();
-		for (color in this.level.getColors()) {
-			this.controls.set(color, new Array());
-		}
+
+		// Create control panel
+		this.controlManager = new ControlManager(70, 10, [Color.getColor("blue")], this.mainSimulator, this);
+		this.controls = this.controlManager.getControls();
 
 		// FlxG.mouse.visible = false;
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
 		this.mainSimulator.onSetControls(this.controls);
 
 		// Background tile map
-		// trace(this.level.getGrid());
 		this.tileMap = new FlxTilemap();
 		this.tileMap.loadMapFrom2DArray(
 			this.level.getGrid(),
@@ -79,24 +79,10 @@ class PlayState extends FlxState {
 	}
 
 	private function createUI():Void {
-        // Create control buttons
-        var forward:FlxButton = new FlxButton(100, FlxG.height - 70, "", this.onClickControl.bind(Control.FORWARD));
-        forward.loadGraphic("assets/images/forward.png");
-        var left:FlxButton = new FlxButton(170, FlxG.height - 70, "", this.onClickControl.bind(Control.LEFT));
-        left.loadGraphic("assets/images/left.png");
-        var right:FlxButton = new FlxButton(240, FlxG.height - 70, "", this.onClickControl.bind(Control.RIGHT));
-        right.loadGraphic("assets/images/right.png");
-        var pause:FlxButton = new FlxButton(310, FlxG.height - 70, "", this.onClickControl.bind(Control.PAUSE));
-        pause.loadGraphic("assets/images/pause.png");
-
         this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
-        add(forward);
-        add(left);
-        add(right);
-        add(pause);
         add(this.playButton);
 	}
 
