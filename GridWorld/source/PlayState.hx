@@ -12,6 +12,7 @@ import flixel.util.FlxColor;
 import flixel.tile.FlxTilemap;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.graphics.FlxGraphic;
+import flixel.addons.display.FlxBackdrop;
 import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
@@ -32,6 +33,8 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		var backdrop = new FlxBackdrop('assets/images/playbg.png');
+		add(backdrop);
 
 		this.isPlaying = false;
 		this.controls = new HashMap();
