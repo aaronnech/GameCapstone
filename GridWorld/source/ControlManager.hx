@@ -27,13 +27,23 @@ class ControlManager {
         this.buttons = new HashMap();
         this.controls = new HashMap();
 
-        for (color in colors) {
-            this.buttons.set(color, []);
-            this.controls.set(color, []);
+        for (i in 0...colors.length) {
+            this.buttons.set(colors[i], []);
+            this.controls.set(colors[i], []);
+
+            var trackX = FlxG.width - tileSize * (colors.length - i);
+            var track = new FlxSprite(trackX, 0);
+            var color = 0x8800BFFF; // blue
+            if (colors[i].color == "red") {
+                color = 0x88E3C934; // yellow
+            }
+            track.makeGraphic(tileSize, FlxG.height, color);
+            this.parentState.add(track);
         }
 
         FlxG.plugins.add(new flixel.addons.plugin.FlxMouseControl());
 
+        // TODO: ban buttons
         var buttonY = FlxG.height - 70;
         var forward = new ControlButton(170, buttonY, "assets/images/forward.png", this, Control.FORWARD);
         var left = new ControlButton(100, buttonY, "assets/images/left.png", this, Control.LEFT);
