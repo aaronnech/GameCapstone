@@ -54,10 +54,7 @@ class Simulator {
 			score += this.controls.get(color).length;
 		}
 
-		score = Std.int(score / 100.0);
-		trace(score);
-
-		return 0;
+		return Std.int(100.0 / score);
 	}
 
 	public function didUserWin():Bool {
