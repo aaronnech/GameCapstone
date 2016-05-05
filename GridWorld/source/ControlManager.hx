@@ -5,7 +5,6 @@ import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.FlxSprite;
 
-// Managers one track
 class ControlManager {
     private var parentState:PlayState;
     private var simulator:Simulator;
@@ -103,7 +102,8 @@ class ControlManager {
             for (i in 0...colors.length) {
                 if (mouseX < startPx + (i + 1) * tileSize) {
                     button.trackColor = colors[i];
-                    button.x = startPx + i * tileSize + 2;
+                    button.x = startPx + i * tileSize + 1;
+                    break;
                 }
             }
 
