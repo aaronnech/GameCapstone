@@ -80,6 +80,7 @@ class ObjectManager implements SpriteManager {
     }
 
     public function update() {
+        this.tweens = new Array<FlxTween>();
         updateSprite(this.vehicles, this.simulator.getVehicles());
         updateSprite(this.gems, this.simulator.getGems());
         updateSprite(this.goals, this.simulator.getGoals());
