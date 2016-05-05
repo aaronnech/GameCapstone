@@ -95,6 +95,8 @@ class PlayState extends FlxState {
 			this.playButton.loadGraphic("assets/images/play.png");
 			this.mainSimulator.reset();
 			this.spriteManager.snap();
+			this.mainSimulator.reset();
+			this.spriteManager.snap();
 		}
 	}
 
@@ -137,6 +139,8 @@ class PlayState extends FlxState {
 
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
+				this.mainSimulator.reset();
+				this.spriteManager.snap();
 				this.isPlaying = false;
 				this.controlManager.resetControlHighlights();
 			}
@@ -145,8 +149,6 @@ class PlayState extends FlxState {
 		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
 			this.controlManager.resetControlHighlights();
-			this.mainSimulator.reset();
-			this.spriteManager.snap();
 		}
 	}
 }
