@@ -118,7 +118,7 @@ class LevelSelectState extends FlxState
 	}
 
 	private function onChangePage(delta:Int) {
-		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageChange', this.delta);
+		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageChange', delta);
 		this.currentPage += delta;
 		this.updateNextPrevious();
 		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageSet', this.currentPage);
