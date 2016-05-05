@@ -10,11 +10,13 @@ import haxe.ds.HashMap;
 class Level {
 	private var json:Dynamic;
 	private var name:String;
+	public var number:Int;
 
 	private static var idCounter:Int = 0;
 
 	public function new(filePath:String) {
 		this.name = filePath;
+		this.number = Std.parseInt(filePath.split('.')[1]);
 	}
 
 	public function load() {
