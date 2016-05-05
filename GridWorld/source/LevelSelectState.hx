@@ -21,6 +21,7 @@ class LevelSelectState extends FlxState
 	private var levels:Array<Level>;
 	private var levelGrid:FlxTypedGroup<FlxButton>;
 	private var next:FlxButton;
+	private var back:FlxButton;
 	private var prev:FlxButton;
 	private var save:FlxSave;
 
@@ -127,11 +128,30 @@ class LevelSelectState extends FlxState
 		this.levels = loadLevels();
 		this.currentPage = 0;
 		this.levelGrid = new FlxTypedGroup<FlxButton>();
-		this.next = new FlxButton(350, FlxG.height - 70, "Next", this.onChangePage.bind(1));
-		this.prev = new FlxButton(200, FlxG.height - 70, "Prev", this.onChangePage.bind(-1));
+
+		this.next = new FlxButton(0, 0, "", this.onChangePage.bind(1));
+		this.prev.loadGraphic('assets/images/next.png');
+		this.next.screenCenter();
+		this.next.y = FlxG.height - 70;
+		this.next.x += 100;
+		this.prev = new FlxButton(0, 0, "", this.onChangePage.bind(-1));
+		this.prev.loadGraphic('assets/images/prev.png');
+		this.prev.screenCenter();
+		this.prev.y = FlxG.height - 70;
+		this.prev.x += 100;
+		this.back = new FlxButton(0, 0, "", this.clickBack);
+		this.back.loadGraphic('assets/images/back.png');
+		this.back.screenCenter();
+		this.back.y = FlxG.height - 70;
+		this.back.x = 10;
+
 		this.updatePage();
 		this.updateNextPrevious();
 		add(this.levelGrid);
+	}
+
+	private function clickBack():Void {
+		FlxG.switchState(new MenuState());
 	}
 
 	override public function update(elapsed:Float):Void {
