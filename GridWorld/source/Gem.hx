@@ -22,4 +22,10 @@ class Gem extends Movable {
 			default: return false;
 		}
 	}
+
+	override public function reset() {
+		super.reset();
+		this.isInGoal = false;
+		this.parentGoal = null;
+	}
 }
