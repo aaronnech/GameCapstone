@@ -7,17 +7,20 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.addons.display.FlxBackdrop;
 
 class LevelSelectState extends FlxState
 {
 	private static var GRID_X:Int = 20;
-	private static var GRID_Y:Int = 20;
-	private static var GRID_WIDTH:Int = 5;
+	private static var GRID_Y:Int = 50;
+	private static var GRID_WIDTH:Int = 6;
 	private static var GRID_HEIGHT:Int = 5;
 	private static var GRID_GAP:Int = 100;
 	private var currentPage:Int;
 	private var levels:List<Level>;
 	private var levelGrid:FlxTypedGroup<FlxButton>;
+	private var next:FlxButton;
+	private var prev:FlxButton;
 
 	private function loadLevels():List<Level> {
 		var allAssets = openfl.Assets.list();
@@ -88,14 +91,31 @@ class LevelSelectState extends FlxState
 	}
 
 	private function updateNextPrevious():Void {
-		var currentLevels = this.getPage();
+		var numInPage = LevelSelectState.GRID_HEIGHT * LevelSelectState.GRID_WIDTH;
+		var minimum = this.currentPage * numInPage;
+		var maximum = minimum + numInPage;
+
+		var canGoNext = maximum < this.levels.length;
+		var canGoPrev = minimum > 0;
+
+		this.next.visible = canGoNext;
+		this.prev.visible = canGoPrev;
+	}
+
+	private function onChangePage(delta:Int) {
+		this.currentPage += delta;
+		this.updateNextPrevious();
 	}
 
 	override public function create():Void {
 		super.create();
+		var backdrop = new FlxBackdrop('assets/images/justfloor.png');
+		add(backdrop);
 		this.levels = loadLevels();
 		this.currentPage = 0;
 		this.levelGrid = new FlxTypedGroup<FlxButton>();
+		this.next = new FlxButton(350, FlxG.height - 70, "Next", this.onChangePage.bind(1));
+		this.prev = new FlxButton(200, FlxG.height - 70, "Prev", this.onChangePage.bind(-1));
 		this.updatePage();
 		this.updateNextPrevious();
 		add(this.levelGrid);
