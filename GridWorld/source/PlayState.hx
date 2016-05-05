@@ -17,6 +17,7 @@ import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
 	public static var TICK_TIME:Float = 0.5;
+	private var levels:Array<Level>;
 	private var level:Level;
 	private var mainSimulator:Simulator;
     private var spriteManager:ObjectManager;
@@ -26,9 +27,10 @@ class PlayState extends FlxState {
 	private var isPlaying:Bool;
 	private var playButton:FlxButton;
 
-	public function new(level:Level) {
+	public function new(levels:Array<Level>, cur:Int) {
 		super();
-		this.level = level;
+		this.level = levels[cur];
+		this.levels = levels;
 	}
 
 	override public function create():Void {
@@ -117,15 +119,30 @@ class PlayState extends FlxState {
 		this.spriteManager.snap();
 	}
 
+	private function endLevel():Void {
+		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
+			FlxG.switchState(new LevelCompleteState(this.levels, this.level.number));
+		});
+	}
+
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		this.totalElapsed = this.totalElapsed + elapsed;
 		if (this.isPlaying && this.totalElapsed > PlayState.TICK_TIME) {
 			if (this.mainSimulator.tick()) {
-				trace("TICK");
 				this.spriteManager.update();
+				if (this.mainSimulator.didUserWin()) {
+					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
+					this.isPlaying = false;
+					return;
+				}
 			} else {
+				if (this.mainSimulator.didUserWin()) {
+					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
+					this.isPlaying = false;
+					return;
+				}
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
 				this.isPlaying = false;

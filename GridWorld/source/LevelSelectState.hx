@@ -17,12 +17,12 @@ class LevelSelectState extends FlxState
 	private static var GRID_HEIGHT:Int = 5;
 	private static var GRID_GAP:Int = 100;
 	private var currentPage:Int;
-	private var levels:List<Level>;
+	private var levels:Array<Level>;
 	private var levelGrid:FlxTypedGroup<FlxButton>;
 	private var next:FlxButton;
 	private var prev:FlxButton;
 
-	private function loadLevels():List<Level> {
+	private function loadLevels():Array<Level> {
 		var allAssets = openfl.Assets.list();
 		var mp = new Map<Int, Level>();
 		var numberLevels = 0;
@@ -36,27 +36,27 @@ class LevelSelectState extends FlxState
 			}
 		}
 
-		var result = new List<Level>();
+		var result = new Array<Level>();
 		for (i in 0...numberLevels) {
-			result.add(mp[i + 1]);
+			result.push(mp[i + 1]);
 		}
 
 		return result;
 	}
 
-	private function startLevel(level:Level):Void {
-		FlxG.switchState(new PlayState(level));
+	private function startLevel(index:Int):Void {
+		FlxG.switchState(new PlayState(this.levels, index));
 	}
 
-	private function getPage():List<Level> {
-		var result = new List<Level>();
+	private function getPage():Array<Level> {
+		var result = new Array<Level>();
 		var i = 0;
 		var numInPage = LevelSelectState.GRID_HEIGHT * LevelSelectState.GRID_WIDTH;
 		var minimum = this.currentPage * numInPage;
 		var maximum = minimum + numInPage;
 		for (level in this.levels) {
 			if (i >= minimum && i < maximum) {
-				result.add(level);
+				result.push(level);
 			}
 			i += 1;
 		}
@@ -71,7 +71,7 @@ class LevelSelectState extends FlxState
 		var col = 0;
 
 		for (level in currentLevels) {
-			var btn = new FlxButton(0, 0, "" + level.number, startLevel.bind(level));
+			var btn = new FlxButton(0, 0, "" + level.number, startLevel.bind(level.number - 1));
 			btn.scale.set(1, 4.5);
 			btn.label.size = 18;
 			btn.x = col * LevelSelectState.GRID_GAP + LevelSelectState.GRID_X;
