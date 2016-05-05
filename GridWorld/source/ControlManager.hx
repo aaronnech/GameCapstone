@@ -15,6 +15,10 @@ class ControlManager {
     private var buttons:HashMap<Color, Array<ControlButton>>;
     private var controls:HashMap<Color, Array<Control>>;
 
+    private var ordering:Array<Control>;
+    private var highlighted_files:Array<String>;
+    private var normal_files:Array<String>;
+
     public function new(tileSize:Int, height:Int, colors:Array<Color>, simulator:Simulator, parent:PlayState) {
         this.parentState = parent;
         this.colors = colors;
@@ -35,6 +39,24 @@ class ControlManager {
         var left = new ControlButton(100, buttonY, "assets/images/left.png", this, Control.LEFT);
         var right = new ControlButton(240, buttonY, "assets/images/right.png", this, Control.RIGHT);
         var pause = new ControlButton(310, buttonY, "assets/images/pause.png", this, Control.PAUSE);
+
+        this.ordering = new Array();
+        this.ordering.push(Control.FORWARD);
+        this.ordering.push(Control.LEFT);
+        this.ordering.push(Control.RIGHT);
+        this.ordering.push(Control.PAUSE);
+
+        this.highlighted_files = new Array();
+        this.highlighted_files.push("assets/images/forward_highlighted.png");
+        this.highlighted_files.push("assets/images/left_highlighted.png");
+        this.highlighted_files.push("assets/images/right_highlighted.png");
+        this.highlighted_files.push("assets/images/pause_highlighted.png");
+
+        this.normal_files = new Array();
+        this.normal_files.push("assets/images/forward.png");
+        this.normal_files.push("assets/images/left.png");
+        this.normal_files.push("assets/images/right.png");
+        this.normal_files.push("assets/images/pause.png");
 
         this.parentState.add(forward);
         this.parentState.add(left);
@@ -89,8 +111,38 @@ class ControlManager {
         return this.controls;
     }
 
-    public function update() {
-        simulator.getControlIndices(); // Hashmap<Color, Int>
+    public function updateControlHighlights() {
+        var controlIndices = this.simulator.getControlIndices(); // Hashmap<Color, Int>
+        for (color in this.buttons.keys()) {
+            var selectedTrack = buttons.get(color);
+            var controlIndex = controlIndices.get(color);
+            var buttonToHighlight = selectedTrack[controlIndex];
+            buttonToHighlight.loadGraphic(
+                this.highlighted_files[this.ordering.indexOf(buttonToHighlight.control)]
+            );
+
+            if (selectedTrack.length > 1) {
+                // Unselect the previous one
+                var index = (controlIndex == 0) ? selectedTrack.length - 1 : controlIndex - 1;
+                var buttonToReset = selectedTrack[index];
+                buttonToReset.loadGraphic(
+                    this.normal_files[this.ordering.indexOf(buttonToReset.control)]
+                );
+            }
+        }
+    }
+
+    public function resetControlHighlights() {
+        // Turn the highlights off
+        for (color in this.buttons.keys()) {
+            var selectedTrack = buttons.get(color);
+            for (i in 0...selectedTrack.length) {
+                var buttonToReset = selectedTrack[i];
+                buttonToReset.loadGraphic(
+                    this.normal_files[this.ordering.indexOf(buttonToReset.control)]
+                );
+            }
+        }
     }
 
     public function setSimulator(s:Dynamic):Void {

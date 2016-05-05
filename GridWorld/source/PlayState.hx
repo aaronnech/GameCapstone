@@ -41,12 +41,13 @@ class PlayState extends FlxState {
 
 		this.isPlaying = false;
 
+		// FlxG.mouse.visible = false;
+		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
+
 		// Create control panel
 		this.controlManager = new ControlManager(70, 10, [Color.getColor("blue")], this.mainSimulator, this);
 		this.controls = this.controlManager.getControls();
 
-		// FlxG.mouse.visible = false;
-		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
 		this.mainSimulator.onSetControls(this.controls);
 
 		// Background tile map
@@ -116,26 +117,34 @@ class PlayState extends FlxState {
 
 		this.totalElapsed = this.totalElapsed + elapsed;
 		if (this.isPlaying && this.totalElapsed > PlayState.TICK_TIME) {
+			// Advance highlighted control indices in the ControlManager
+			this.controlManager.updateControlHighlights();
 			if (this.mainSimulator.tick()) {
 				this.spriteManager.update();
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
+					this.controlManager.resetControlHighlights();
 					this.isPlaying = false;
 					return;
 				}
 			} else {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
+					this.controlManager.resetControlHighlights();
 					this.isPlaying = false;
 					return;
 				}
+
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
 				this.isPlaying = false;
+				this.controlManager.resetControlHighlights();
 			}
+
 			this.totalElapsed = 0;
 		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
+			this.controlManager.resetControlHighlights();
 		}
 	}
 }
