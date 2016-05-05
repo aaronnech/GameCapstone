@@ -12,11 +12,11 @@ import flixel.util.FlxSave;
 
 class LevelSelectState extends FlxState
 {
-	private static var GRID_X:Int = 20;
+	private static var GRID_X:Int = 40;
 	private static var GRID_Y:Int = 50;
 	private static var GRID_WIDTH:Int = 6;
 	private static var GRID_HEIGHT:Int = 5;
-	private static var GRID_GAP:Int = 100;
+	private static var GRID_GAP:Int = 95;
 	private var currentPage:Int;
 	private var levels:Array<Level>;
 	private var levelGrid:FlxTypedGroup<FlxButton>;
@@ -134,16 +134,21 @@ class LevelSelectState extends FlxState
 		this.next.screenCenter();
 		this.next.y = FlxG.height - 70;
 		this.next.x += 100;
+		add(this.next);
+
 		this.prev = new FlxButton(0, 0, "", this.onChangePage.bind(-1));
 		this.prev.loadGraphic('assets/images/prev.png');
 		this.prev.screenCenter();
 		this.prev.y = FlxG.height - 70;
-		this.prev.x += 100;
+		this.prev.x -= 100;
+		add(this.prev);
+
 		this.back = new FlxButton(0, 0, "", this.clickBack);
 		this.back.loadGraphic('assets/images/back.png');
 		this.back.screenCenter();
 		this.back.y = FlxG.height - 70;
-		this.back.x = 10;
+		this.back.x = 40;
+		add(this.back);
 
 		this.updatePage();
 		this.updateNextPrevious();
