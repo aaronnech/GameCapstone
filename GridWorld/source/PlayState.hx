@@ -46,7 +46,8 @@ class PlayState extends FlxState {
 
 		// Create control panel
 		this.controlManager = new ControlManager(70, this.level.getColors(),
-			this.level.getBannedControls(), this.mainSimulator, this);
+												 this.level.getBannedControls(),
+												 this.mainSimulator, this);
 		this.controls = this.controlManager.getControls();
 
 		this.mainSimulator.onSetControls(this.controls);
@@ -85,7 +86,14 @@ class PlayState extends FlxState {
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
+        var backButton = new FlxButton(400, FlxG.height - 40, "Menu", this.onClickBack);
+
+        add(backButton);
         add(this.playButton);
+	}
+
+	private function onClickBack() {
+		FlxG.switchState(new LevelSelectState());
 	}
 
 	private function onClickPlay():Void {
