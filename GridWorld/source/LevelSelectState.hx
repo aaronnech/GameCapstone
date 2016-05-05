@@ -130,7 +130,7 @@ class LevelSelectState extends FlxState
 		this.levelGrid = new FlxTypedGroup<FlxButton>();
 
 		this.next = new FlxButton(0, 0, "", this.onChangePage.bind(1));
-		this.prev.loadGraphic('assets/images/next.png');
+		this.next.loadGraphic('assets/images/next.png');
 		this.next.screenCenter();
 		this.next.y = FlxG.height - 70;
 		this.next.x += 100;
