@@ -121,7 +121,11 @@ class PlayState extends FlxState {
 
 	private function endLevel():Void {
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
-			FlxG.switchState(new LevelCompleteState(this.levels, this.level.number));
+			if (this.level.number == levels.length) {
+				FlxG.switchState(new LevelSelectState());
+			} else {
+				FlxG.switchState(new LevelCompleteState(this.levels, this.level.number));
+			}
 		});
 	}
 
