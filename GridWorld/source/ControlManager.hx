@@ -10,7 +10,6 @@ class ControlManager {
     private var parentState:PlayState;
     private var simulator:Simulator;
     private var tileSize:Int;
-    private var height:Int; // number of slots per control
     private var colors:Array<Color>;
     private var buttons:HashMap<Color, Array<ControlButton>>;
     private var controls:HashMap<Color, Array<Control>>;
@@ -19,7 +18,13 @@ class ControlManager {
     private var highlighted_files:Array<String>;
     private var normal_files:Array<String>;
 
-    public function new(tileSize:Int, height:Int, colors:Array<Color>, simulator:Simulator, parent:PlayState) {
+    public function new(
+        tileSize:Int,
+        colors:Array<Color>,
+        bannedControls:Array<Control>,
+        simulator:Simulator,
+        parent:PlayState
+    ) {
         this.parentState = parent;
         this.colors = colors;
         this.tileSize = tileSize;
@@ -41,14 +46,7 @@ class ControlManager {
             this.parentState.add(track);
         }
 
-        FlxG.plugins.add(new flixel.addons.plugin.FlxMouseControl());
-
-        // TODO: ban buttons
-        var buttonY = FlxG.height - 70;
-        var forward = new ControlButton(170, buttonY, "assets/images/forward.png", this, Control.FORWARD);
-        var left = new ControlButton(100, buttonY, "assets/images/left.png", this, Control.LEFT);
-        var right = new ControlButton(240, buttonY, "assets/images/right.png", this, Control.RIGHT);
-        var pause = new ControlButton(310, buttonY, "assets/images/pause.png", this, Control.PAUSE);
+        this.makeButtons(bannedControls);
 
         this.ordering = new Array();
         this.ordering.push(Control.FORWARD);
@@ -67,11 +65,28 @@ class ControlManager {
         this.normal_files.push("assets/images/left.png");
         this.normal_files.push("assets/images/right.png");
         this.normal_files.push("assets/images/pause.png");
+    }
 
-        this.parentState.add(forward);
-        this.parentState.add(left);
-        this.parentState.add(right);
-        this.parentState.add(pause);
+    private function makeButtons(bannedControls:Array<Control>) {
+        FlxG.plugins.add(new flixel.addons.plugin.FlxMouseControl());
+
+        var buttonY = FlxG.height - 70;
+        if (bannedControls.indexOf(Control.FORWARD) == -1) {
+            var forward = new ControlButton(170, buttonY, "assets/images/forward.png", this, Control.FORWARD);
+            this.parentState.add(forward);
+        }
+        if (bannedControls.indexOf(Control.LEFT) == -1) {
+            var left = new ControlButton(100, buttonY, "assets/images/left.png", this, Control.LEFT);
+            this.parentState.add(left);
+        }
+        if (bannedControls.indexOf(Control.RIGHT) == -1) {
+            var right = new ControlButton(240, buttonY, "assets/images/right.png", this, Control.RIGHT);
+            this.parentState.add(right);
+        }
+        if (bannedControls.indexOf(Control.PAUSE) == -1) {
+            var pause = new ControlButton(310, buttonY, "assets/images/pause.png", this, Control.PAUSE);
+            this.parentState.add(pause);
+        }
     }
 
     public function pickUpButton(button:ControlButton) {
@@ -95,10 +110,11 @@ class ControlManager {
             // TODO: Sort Y position of button
             // put at end for now
             var colorButtons = buttons.get(button.trackColor);
+            var colorControls = controls.get(button.trackColor);
             button.y = colorButtons.length * tileSize;
             button.disableMouseDrag();
             colorButtons.push(button);
-            controls.get(button.trackColor).push(button.control);
+            colorControls.push(button.control);
         }
     }
 
@@ -122,7 +138,7 @@ class ControlManager {
     }
 
     public function updateControlHighlights() {
-        var controlIndices = this.simulator.getControlIndices(); // Hashmap<Color, Int>
+        var controlIndices = this.simulator.getControlIndices();
         for (color in this.buttons.keys()) {
             var selectedTrack = buttons.get(color);
             if (selectedTrack.length == 0) {
