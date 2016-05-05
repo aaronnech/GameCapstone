@@ -95,8 +95,6 @@ class PlayState extends FlxState {
 			this.playButton.loadGraphic("assets/images/play.png");
 			this.mainSimulator.reset();
 			this.spriteManager.snap();
-			this.mainSimulator.reset();
-			this.spriteManager.snap();
 		}
 	}
 
@@ -137,8 +135,6 @@ class PlayState extends FlxState {
 					return;
 				}
 
-				this.mainSimulator.reset();
-				this.spriteManager.snap();
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
 				this.isPlaying = false;

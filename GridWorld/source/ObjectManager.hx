@@ -16,6 +16,7 @@ class ObjectManager implements SpriteManager {
     private var vehicles:HashMap<Vehicle, FlxSprite>;
     private var gems:HashMap<Gem, FlxSprite>;
     private var goals:HashMap<Goal, FlxSprite>;
+    private var tweens:Array<FlxTween>;
 
     public function new(s:Simulator, tileSize:Int) {
         this.simulator = s;
@@ -23,6 +24,7 @@ class ObjectManager implements SpriteManager {
         this.vehicles = new HashMap();
         this.gems = new HashMap();
         this.goals = new HashMap();
+        this.tweens = new Array<FlxTween>();
     }
 
     public function generate() {
@@ -90,7 +92,7 @@ class ObjectManager implements SpriteManager {
             var newX = o.x * tileSize + xOffset;
             var newY = o.y * tileSize + yOffset;
             var sprite = map.get(o);
-            FlxTween.tween(sprite, {x: newX, y:newY}, PlayState.TICK_TIME / 2);
+            tweens.push(FlxTween.tween(sprite, {x: newX, y:newY}, PlayState.TICK_TIME / 2));
 
             // Rotate vehicle
             if (Std.is(o, Vehicle) && sprite.facing != getDirection(o.direction)) {
@@ -105,10 +107,10 @@ class ObjectManager implements SpriteManager {
 
                 if (diff == 1 || diff == -3) {
                     // Turn right
-                    FlxTween.angle(sprite, from, from + 90, PlayState.TICK_TIME / 2);
+                    tweens.push(FlxTween.angle(sprite, from, from + 90, PlayState.TICK_TIME / 2));
                 } else if (diff == -1 || diff == 3) {
                     // Turn left
-                    FlxTween.angle(sprite, from, from - 90, PlayState.TICK_TIME / 2);
+                    tweens.push(FlxTween.angle(sprite, from, from - 90, PlayState.TICK_TIME / 2));
                 }
                 sprite.facing = getDirection(o.direction);
             }
@@ -154,6 +156,10 @@ class ObjectManager implements SpriteManager {
     }
 
     public function snap() {
+        for (tw in tweens) {
+            tw.cancel();
+        }
+        this.tweens = new Array<FlxTween>();
         snapSprite(this.vehicles, this.simulator.getVehicles());
         snapSprite(this.gems, this.simulator.getGems());
         snapSprite(this.goals, this.simulator.getGoals());
