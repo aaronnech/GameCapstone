@@ -13,13 +13,21 @@ class LevelSelectState extends FlxState
 
 	private function loadLevels():List<Level> {
 		var allAssets = openfl.Assets.list();
-		var result = new List<Level>();
+		var mp = new Map<Int, Level>();
+		var numberLevels = 0;
 		for (asset in allAssets) {
 			if (asset.indexOf('levels') > -1) {
 				var l = new Level(asset);
 				l.load();
-				result.add(l);
+				var n = Std.parseInt(asset.split('.')[1]);
+				mp.set(n, l);
+				numberLevels += 1;
 			}
+		}
+
+		var result = new List<Level>();
+		for (i in 0...numberLevels) {
+			result.add(mp[i + 1]);
 		}
 
 		return result;
