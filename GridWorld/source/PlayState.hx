@@ -152,7 +152,7 @@ class PlayState extends FlxState {
 				this.spriteManager.snap();
 				this.isPlaying = false;
 				this.controlManager.resetControlHighlights();
-				FlxG.camera.flash();
+				FlxG.camera.flash(FlxColor.WHITE, 0.1);
 				this.updatePlayControls();
 			}
 
