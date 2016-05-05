@@ -115,6 +115,10 @@ class ControlManager {
         var controlIndices = this.simulator.getControlIndices(); // Hashmap<Color, Int>
         for (color in this.buttons.keys()) {
             var selectedTrack = buttons.get(color);
+            if (selectedTrack.length == 0) {
+                continue;
+            }
+
             var controlIndex = controlIndices.get(color);
             var buttonToHighlight = selectedTrack[controlIndex];
             buttonToHighlight.loadGraphic(
