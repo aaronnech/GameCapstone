@@ -41,15 +41,20 @@ class LevelCompleteState extends FlxState {
 		if (this.nextIndex < this.levels.length) {
 			var next = new FlxButton(0, 0, "Next Level", clickNext);
 			next.screenCenter();
-			next.x += 50;
+			next.x += 70;
 			add(next);
 		}
 
-		var redo = new FlxButton(0, 0, "Redo", clickRedo);
+		var redo = new FlxButton(0, 0, "", clickRedo);
+		redo.loadGraphic('assets/images/retry.png');
 		redo.screenCenter();
-		redo.x -= 50;
 		add(redo);
 
+		var back = new FlxButton(0, 0, "", clickBack);
+		back.loadGraphic('assets/images/back.png');
+		back.x -= 70;
+		back.screenCenter();
+		add(back);
 
 		var scoreText = new FlxText(0, 0);
 		scoreText.text = "Score: " + this.score;
@@ -60,6 +65,10 @@ class LevelCompleteState extends FlxState {
 
 	private function clickNext():Void {
 		FlxG.switchState(new PlayState(this.levels, this.nextIndex));
+	}
+
+	private function clickBack():Void {
+		FlxG.switchState(new LevelSelectState());
 	}
 
 	private function clickRedo():Void {
