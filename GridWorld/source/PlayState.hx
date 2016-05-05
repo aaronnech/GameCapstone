@@ -98,12 +98,16 @@ class PlayState extends FlxState {
 
 	private function onClickPlay():Void {
 		this.isPlaying = !this.isPlaying;
+		this.mainSimulator.reset();
+		this.spriteManager.snap();
+		this.updatePlayControls();
+	}
+
+	private function updatePlayControls():Void {
 		if (this.isPlaying) {
 			this.playButton.loadGraphic("assets/images/stop.png");
 		} else {
 			this.playButton.loadGraphic("assets/images/play.png");
-			this.mainSimulator.reset();
-			this.spriteManager.snap();
 		}
 	}
 
@@ -148,6 +152,8 @@ class PlayState extends FlxState {
 				this.spriteManager.snap();
 				this.isPlaying = false;
 				this.controlManager.resetControlHighlights();
+				FlxG.camera.flash();
+				this.updatePlayControls();
 			}
 
 			this.totalElapsed = 0;
