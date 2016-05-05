@@ -8,6 +8,7 @@ import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.display.FlxBackdrop;
+import flixel.util.FlxSave;
 
 class LevelSelectState extends FlxState
 {
@@ -21,6 +22,7 @@ class LevelSelectState extends FlxState
 	private var levelGrid:FlxTypedGroup<FlxButton>;
 	private var next:FlxButton;
 	private var prev:FlxButton;
+	private var save:FlxSave;
 
 	private function loadLevels():Array<Level> {
 		var allAssets = openfl.Assets.list();
@@ -45,7 +47,9 @@ class LevelSelectState extends FlxState
 	}
 
 	private function startLevel(index:Int):Void {
-		FlxG.switchState(new PlayState(this.levels, index));
+		if (this.save.data.highestLevel >= index) {
+			FlxG.switchState(new PlayState(this.levels, index));
+		}
 	}
 
 	private function getPage():Array<Level> {
@@ -70,12 +74,19 @@ class LevelSelectState extends FlxState
 		var row = 0;
 		var col = 0;
 
+		if (!this.save.data.highestLevel) {
+			this.save.data.highestLevel = 0;
+		}
+
 		for (level in currentLevels) {
 			var btn = new FlxButton(0, 0, "" + level.number, startLevel.bind(level.number - 1));
 			btn.scale.set(1, 4.5);
 			btn.label.size = 18;
 			btn.x = col * LevelSelectState.GRID_GAP + LevelSelectState.GRID_X;
 			btn.y = row * LevelSelectState.GRID_GAP + LevelSelectState.GRID_Y;
+			if (this.save.data.highestLevel < level.number - 1) {
+				btn.alpha = 0.5;
+			}
 			this.levelGrid.add(btn);
 
 			// Update grid coordinates
@@ -109,6 +120,8 @@ class LevelSelectState extends FlxState
 
 	override public function create():Void {
 		super.create();
+		this.save = new FlxSave();
+		this.save.bind("Game");
 		var backdrop = new FlxBackdrop('assets/images/justfloor.png');
 		add(backdrop);
 		this.levels = loadLevels();

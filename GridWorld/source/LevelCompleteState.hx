@@ -9,15 +9,25 @@ import flixel.math.FlxMath;
 import flixel.math.FlxVelocity;
 import flixel.addons.display.FlxBackdrop;
 import flixel.system.FlxSound;
+import flixel.util.FlxSave;
 
 class LevelCompleteState extends FlxState {
 	private var levels:Array<Level>;
 	private var nextIndex:Int;
+	private var score:Int;
 
-	public function new(levels:Array<Level>, nextIndex:Int) {
+	public function new(levels:Array<Level>, nextIndex:Int, score:Int) {
 		super();
 		this.levels = levels;
 		this.nextIndex = nextIndex;
+
+		var save = new FlxSave();
+		save.bind("Game");
+		if (!save.data.highestLevel) {
+			save.data.highestLevel = 0;
+		}
+
+		save.data.highestLevel = Math.max(nextIndex, save.data.highestLevel);
 	}
 
 	override public function create():Void {
@@ -38,6 +48,13 @@ class LevelCompleteState extends FlxState {
 		redo.screenCenter();
 		redo.x -= 50;
 		add(redo);
+
+
+		var scoreText = new FlxText(0, 0);
+		scoreText.text = "Score: " + this.score;
+		scoreText.screenCenter();
+		scoreText.y = scoreText.y - 70;
+		add(scoreText);
 	}
 
 	private function clickNext():Void {
