@@ -6,9 +6,9 @@ var palette;
 $(document).ready(function() {
 	var json = {
 		'settings' : {
-			'tileSize' : 24,
-			'width' : 28,
-			'height' : 15
+			'tileSize' : 32,
+			'width' : 10,
+			'height' : 10
 		},
 		'tiles' : [
 			{
@@ -49,7 +49,7 @@ $(document).ready(function() {
 				"members" : [
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 1',
+						'name' : 'Vehicle 1N',
 						'color' : '#0000FF',
 						'attributes' : {
 							'color' : 'blue',
@@ -59,7 +59,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 2',
+						'name' : 'Vehicle 2N',
 						'color' : '#FF0000',
 						'attributes' : {
 							'color' : 'red',
@@ -69,7 +69,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 3',
+						'name' : 'Vehicle 3N',
 						'color' : '#00FF00',
 						'attributes' : {
 							'color' : 'green',
@@ -84,7 +84,7 @@ $(document).ready(function() {
 				"members" : [
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 1',
+						'name' : 'Vehicle 1E',
 						'color' : '#0000FF',
 						'attributes' : {
 							'color' : 'blue',
@@ -94,7 +94,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 2',
+						'name' : 'Vehicle 2E',
 						'color' : '#FF0000',
 						'attributes' : {
 							'color' : 'red',
@@ -104,7 +104,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 3',
+						'name' : 'Vehicle 3E',
 						'color' : '#00FF00',
 						'attributes' : {
 							'color' : 'green',
@@ -119,32 +119,32 @@ $(document).ready(function() {
 				"members" : [
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 1',
+						'name' : 'Vehicle 1S',
 						'color' : '#0000FF',
 						'attributes' : {
 							'color' : 'blue',
 							'type' : 'VehiclesSouth',
-							'orientation' : 3
+							'orientation' : 2
 						}
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 2',
+						'name' : 'Vehicle 2S',
 						'color' : '#FF0000',
 						'attributes' : {
 							'color' : 'red',
 							'type' : 'VehiclesSouth',
-							'orientation' : 3
+							'orientation' : 2
 						}
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 3',
+						'name' : 'Vehicle 3S',
 						'color' : '#00FF00',
 						'attributes' : {
 							'color' : 'green',
 							'type' : 'VehiclesSouth',
-							'orientation' : 3
+							'orientation' : 2
 						}
 					}
 				]
@@ -154,7 +154,7 @@ $(document).ready(function() {
 				"members" : [
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 1',
+						'name' : 'Vehicle 1W',
 						'color' : '#0000FF',
 						'attributes' : {
 							'color' : 'blue',
@@ -164,7 +164,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 2',
+						'name' : 'Vehicle 2W',
 						'color' : '#FF0000',
 						'attributes' : {
 							'color' : 'red',
@@ -174,7 +174,7 @@ $(document).ready(function() {
 					},
 					{
 						'type' : 'object',
-						'name' : 'Vehicle 3',
+						'name' : 'Vehicle 3W',
 						'color' : '#00FF00',
 						'attributes' : {
 							'color' : 'green',
