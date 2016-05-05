@@ -89,6 +89,7 @@ class ControlManager {
         return this.controls;
     }
 
+    // TODO: implement highlight of controls
     public function update() {
         simulator.getControlIndices(); // Hashmap<Color, Int>
     }

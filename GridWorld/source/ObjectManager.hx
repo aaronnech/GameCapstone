@@ -143,8 +143,8 @@ class ObjectManager implements SpriteManager {
             if (gem.isInGoal) {
                 this.gems.get(gem).visible = false;
                 this.goals.get(gem.parentGoal).visible = false;
-                FlxG.camera.shake(0.01, 0.1);
-                FlxG.camera.flash(0.1);
+                // FlxG.camera.shake(0.01, 0.1);
+                // FlxG.camera.flash(0.1);
             }
         }
     }
@@ -169,6 +169,7 @@ class ObjectManager implements SpriteManager {
 
             if (Std.is(o, Vehicle)) {
                 sprite.facing = getDirection(o.direction);
+                sprite.angle = getFaceAngle(getDirection(o.direction));
             }
 
             sprite.visible = true;
