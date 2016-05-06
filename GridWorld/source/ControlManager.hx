@@ -8,11 +8,11 @@ import flixel.math.FlxRect;
 import flixel.addons.plugin.FlxMouseControl;
 
 class ControlManager {
-    private var trackLeftmostX:Int;
+    public var trackLeftmostX:Int;
+    public var tileSize:Int;
 
     private var parentState:PlayState;
     private var simulator:Simulator;
-    private var tileSize:Int;
     private var colors:Array<Color>;
     private var buttons:HashMap<Color, Array<ControlButton>>;
     private var controls:HashMap<Color, Array<Control>>;

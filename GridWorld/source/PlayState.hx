@@ -9,10 +9,12 @@ import flixel.math.FlxMath;
 import flixel.math.FlxVelocity;
 import flixel.system.FlxSound;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import flixel.tile.FlxTilemap;
 import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.graphics.FlxGraphic;
 import flixel.addons.display.FlxBackdrop;
+import flixel.tweens.FlxTween;
 import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
@@ -78,6 +80,10 @@ class PlayState extends FlxState {
 
 		// UI
 		this.createUI();
+
+		if (level.number == 1) {
+			this.dragAndDropTutorial();
+		}
 
 		this.totalElapsed = 0;
 	}
@@ -171,5 +177,31 @@ class PlayState extends FlxState {
 			this.totalElapsed = 0;
 			this.controlManager.resetControlHighlights();
 		}
+	}
+
+	private function dragAndDropTutorial() {
+		var actors = [
+			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png"),
+			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png"),
+			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png")
+		];
+		var tileSize = this.controlManager.tileSize;
+		var timer = new FlxTimer();
+		var i = 0;
+
+		function animateButton(timer:FlxTimer) {
+			if (i == actors.length + 1) {
+				for (actor in actors) {
+					actor.destroy();
+				}
+				return;
+			} else if (i < actors.length) {
+				add(actors[i]);
+				FlxTween.tween(actors[i], {x: FlxG.width - tileSize, y: i * tileSize}, 1);
+			}
+			i += 1;
+		}
+
+		timer.start(0.7, animateButton, 5);
 	}
 }
