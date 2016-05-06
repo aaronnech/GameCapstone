@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
+import flixel.system.FlxSound;
 
 class ObjectManager implements SpriteManager {
     public var xOffset:Int = 0;
@@ -18,6 +19,8 @@ class ObjectManager implements SpriteManager {
     private var goals:HashMap<Goal, FlxSprite>;
     private var tweens:Array<FlxTween>;
 
+    private var gemSound:FlxSound;
+
     public function new(s:Simulator, tileSize:Int) {
         this.simulator = s;
         this.tileSize = tileSize;
@@ -25,6 +28,7 @@ class ObjectManager implements SpriteManager {
         this.gems = new HashMap();
         this.goals = new HashMap();
         this.tweens = new Array<FlxTween>();
+        this.gemSound = FlxG.sound.load("assets/sounds/gemingoal.wav");
     }
 
     public function generate() {
@@ -146,8 +150,7 @@ class ObjectManager implements SpriteManager {
             if (gem.isInGoal) {
                 this.gems.get(gem).visible = false;
                 this.goals.get(gem.parentGoal).visible = false;
-                // FlxG.camera.shake(0.01, 0.1);
-                // FlxG.camera.flash(0.1);
+                this.gemSound.play();
             }
         }
     }
