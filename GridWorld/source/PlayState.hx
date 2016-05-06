@@ -63,14 +63,14 @@ class PlayState extends FlxState {
 			this.level.getTileSize(),
 			FlxTilemapAutoTiling.OFF, 0, 0
 		);
-		this.tileMap.x = 20;
-		this.tileMap.y = 20;
+		this.tileMap.x = 80;
+		this.tileMap.y = 50;
 		this.add(this.tileMap);
 
 		// Objects
 		this.spriteManager = new ObjectManager(this.mainSimulator, this.level.getTileSize());
-		this.spriteManager.xOffset = 20;
-		this.spriteManager.yOffset = 20;
+		this.spriteManager.xOffset = 80;
+		this.spriteManager.yOffset = 50;
 		this.spriteManager.generate();
 		var sprites = this.spriteManager.getSprites();
 		for (sprite in sprites) {
@@ -102,7 +102,7 @@ class PlayState extends FlxState {
 	}
 
 	private function onClickPlay():Void {
-		if (this.controlManager.hasControls()) {
+		if (!this.controlManager.hasControls()) {
 			return;
 		}
 
