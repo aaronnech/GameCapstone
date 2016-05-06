@@ -10,7 +10,6 @@ import flixel.addons.plugin.FlxMouseControl;
 class ControlManager {
     private var trackLeftmostX:Int;
 
-    private var enabled:Bool;
     private var parentState:PlayState;
     private var simulator:Simulator;
     private var tileSize:Int;
@@ -34,7 +33,6 @@ class ControlManager {
         parent:PlayState
     ) {
         this.trackLeftmostX = FlxG.width - colors.length * tileSize;
-        this.enabled = true;
         this.parentState = parent;
         this.colors = colors;
         this.tileSize = tileSize;
@@ -111,9 +109,6 @@ class ControlManager {
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
         if (mouseX < this.trackLeftmostX || mouseX > FlxG.width) {
-            // if (button.indexOnTrack != -1) {
-            //     this.removeControl(button.trackColor, button.indexOnTrack);
-            // }
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
@@ -219,13 +214,12 @@ class ControlManager {
         return this.controls;
     }
 
-    public function toggleControls() {
-        this.enabled = !this.enabled;
-        if (this.enabled) {
-            FlxMouseControl.mouseZone = FlxG.worldBounds;
-        } else {
-            FlxMouseControl.mouseZone = new FlxRect(10, FlxG.height - 70, 70, 70);
-        }
+    public function enableControls() {
+        FlxMouseControl.mouseZone = FlxG.worldBounds;
+    }
+
+    public function disableControls() {
+        FlxMouseControl.mouseZone = new FlxRect(10, FlxG.height - 70, 70, 70);
     }
 
     public function updateControlHighlights() {

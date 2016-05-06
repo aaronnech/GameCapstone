@@ -95,12 +95,14 @@ class PlayState extends FlxState {
 
 	private function onClickBack() {
 		FlxG.switchState(new LevelSelectState());
+		this.isPlaying = false;
+		this.controlManager.enableControls();
 		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back');
 	}
 
 	private function onClickPlay():Void {
 		this.isPlaying = !this.isPlaying;
-		this.controlManager.toggleControls();
+		this.controlManager.disableControls();
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
 		this.updatePlayControls();
@@ -140,7 +142,7 @@ class PlayState extends FlxState {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
 					this.controlManager.resetControlHighlights();
-					this.controlManager.toggleControls();
+					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
@@ -148,7 +150,7 @@ class PlayState extends FlxState {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
 					this.controlManager.resetControlHighlights();
-					this.controlManager.toggleControls();
+					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
@@ -156,7 +158,7 @@ class PlayState extends FlxState {
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
 				this.controlManager.resetControlHighlights();
-				this.controlManager.toggleControls();
+				this.controlManager.enableControls();
 				this.isPlaying = false;
 				FlxG.camera.flash(FlxColor.WHITE, 0.1);
 				this.updatePlayControls();
