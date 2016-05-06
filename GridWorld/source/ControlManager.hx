@@ -4,8 +4,13 @@ import haxe.ds.HashMap;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.FlxSprite;
+import flixel.math.FlxRect;
+import flixel.addons.plugin.FlxMouseControl;
 
 class ControlManager {
+    private var trackLeftmostX:Int;
+
+    private var enabled:Bool;
     private var parentState:PlayState;
     private var simulator:Simulator;
     private var tileSize:Int;
@@ -17,6 +22,10 @@ class ControlManager {
     private var highlighted_files:Array<String>;
     private var normal_files:Array<String>;
 
+    // Keeps track of where on the tracks the mouse is hovering over. For every
+    // <K, V> pair, if V = -1, then the mouse was not previously on the K track.
+    private var mouseOverTrack:HashMap<Color, Int>;
+
     public function new(
         tileSize:Int,
         colors:Array<Color>,
@@ -24,21 +33,28 @@ class ControlManager {
         simulator:Simulator,
         parent:PlayState
     ) {
+        this.trackLeftmostX = FlxG.width - colors.length * tileSize;
+        this.enabled = true;
         this.parentState = parent;
         this.colors = colors;
         this.tileSize = tileSize;
         this.simulator = simulator;
         this.buttons = new HashMap();
         this.controls = new HashMap();
+        this.mouseOverTrack = new HashMap();
 
         for (i in 0...colors.length) {
             this.buttons.set(colors[i], []);
             this.controls.set(colors[i], []);
+            this.mouseOverTrack.set(colors[i], -1);
 
+            // Make tracks
             var trackX = FlxG.width - tileSize * (colors.length - i);
             var track = new FlxSprite(trackX, 0);
-            var color = 0x8800BFFF; // blue
-            if (colors[i].color == "red") {
+            var color = 0x00000000;
+            if (colors[i].color == "blue") {
+                color = 0x8800BFFF;
+            } else if (colors[i].color == "red") {
                 color = 0x88E3C934; // yellow
             }
             track.makeGraphic(tileSize, FlxG.height, color);
@@ -88,53 +104,128 @@ class ControlManager {
         }
     }
 
-    public function pickUpButton(button:ControlButton) {
+    public function duplicateButton(button:ControlButton) {
         this.parentState.add(button.copy());
     }
 
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
-        var startPx = FlxG.width - colors.length * tileSize;
-        if (mouseX < startPx) {
+        if (mouseX < this.trackLeftmostX || mouseX > FlxG.width) {
+            // if (button.indexOnTrack != -1) {
+            //     this.removeControl(button.trackColor, button.indexOnTrack);
+            // }
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
-            for (i in 0...colors.length) {
-                if (mouseX < startPx + (i + 1) * tileSize) {
-                    button.trackColor = colors[i];
-                    button.x = startPx + i * tileSize + 1;
-                    break;
-                }
-            }
+            button.trackColor = this.getTrackColorUnderMouse(mouseX, mouseY);
+            button.x = this.trackLeftmostX + colors.indexOf(button.trackColor) * tileSize + 1;
 
             // TODO: Sort Y position of button
             // put at end for now
-            var colorButtons = buttons.get(button.trackColor);
-            var colorControls = controls.get(button.trackColor);
-            button.y = colorButtons.length * tileSize;
-            button.disableMouseDrag();
-            colorButtons.push(button);
-            colorControls.push(button.control);
+            var tileY = Math.floor(mouseY / this.tileSize);
+
+            // Clear mouse hover data
+            for (color in this.colors) {
+                this.mouseOverTrack.set(color, -1);
+            }
+
+            this.addControl(button.trackColor, button, button.control, tileY);
         }
+
+
     }
 
-    public function destroyButton(button:ControlButton) {
-        var colorButtons = this.buttons.get(button.trackColor);
-        var index = Math.floor(button.y / tileSize);
+    // Add control to end if index > length.
+    public function addControl(color:Color, button:ControlButton, control:Control, index:Int) {
+        var colorButtons = this.buttons.get(color);
+        var colorControls = this.controls.get(color);
+        if (index > colorButtons.length) {
+            index = colorButtons.length;
+        }
+        button.putOnTrack(index);
+        button.y = index * tileSize;
+        for (i in index...colorButtons.length) {
+            colorButtons[i].indexOnTrack += 1;
+        }
+        colorButtons.insert(index, button);
+        colorControls.insert(index, control);
+    }
+
+    public function removeControl(color:Color, index:Int) {
+        var colorButtons = this.buttons.get(color);
+        var colorControls = this.controls.get(color);
         colorButtons.splice(index, 1);
-        controls.get(button.trackColor).splice(index, 1);
-        button.destroy();
-        shiftButtons(index, colorButtons);
+        colorControls.splice(index, 1);
+        for (i in index...colorButtons.length) {
+            colorButtons[i].indexOnTrack -= 1;
+        }
+        this.shiftButtonsUp(index, color);
     }
 
-    private function shiftButtons(i:Int, buttons:Array<ControlButton>) {
-        for (x in i...buttons.length) {
-            buttons[x].y -= tileSize;
+    private function shiftButtonsUp(i:Int, color:Color) {
+        shiftButtons(i, color, -this.tileSize);
+    }
+
+    private function shiftButtonsDown(i:Int, color:Color) {
+        shiftButtons(i, color, this.tileSize);
+    }
+
+    private function shiftButtons(i:Int, color:Color, shift:Int) {
+        var colorButtons = this.buttons.get(color);
+        for (x in i...colorButtons.length) {
+            colorButtons[x].y += shift;
         }
+    }
+
+    public function checkMouseHover(mouseX:Int, mouseY:Int) {
+        var currentTrack = this.getTrackColorUnderMouse(mouseX, mouseY);
+        var tileY = Math.floor(mouseY / this.tileSize);
+        for (color in this.colors) {
+            var trackIndex = this.mouseOverTrack.get(color);
+            if (color == currentTrack) {
+                if (trackIndex != tileY) {
+                    // Button's Y position changed
+                    if (trackIndex != -1) {
+                        // Undo previous shift
+                        this.shiftButtonsUp(trackIndex, currentTrack);
+                    }
+                    // Do new shift
+                    this.shiftButtonsDown(tileY, currentTrack);
+                    this.mouseOverTrack.set(currentTrack, tileY);
+                }
+            } else if (trackIndex != -1) {
+                // Undo this color's shifts
+                this.shiftButtonsUp(trackIndex, color);
+                this.mouseOverTrack.set(color, -1);
+            } else if (currentTrack == null) {
+                // Clear mouse hover data
+                this.mouseOverTrack.set(color, -1);
+            }
+        }
+    }
+
+    private function getTrackColorUnderMouse(mouseX:Int, mouseY:Int) {
+        if (mouseX >= this.trackLeftmostX) {
+            for (i in 0...this.colors.length) {
+                if (mouseX < this.trackLeftmostX + (i + 1) * tileSize) {
+                    return colors[i];
+                }
+            }
+        }
+        return null;
     }
 
     public function getControls():HashMap<Color, Array<Control>> {
         return this.controls;
+    }
+
+    public function toggleControls() {
+        this.enabled = !this.enabled;
+        if (this.enabled) {
+            FlxMouseControl.mouseZone = FlxG.worldBounds;
+        } else {
+            FlxMouseControl.mouseZone = new FlxRect(10, FlxG.height - 70, 70, 70);
+        }
     }
 
     public function updateControlHighlights() {

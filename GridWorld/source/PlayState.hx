@@ -100,6 +100,7 @@ class PlayState extends FlxState {
 
 	private function onClickPlay():Void {
 		this.isPlaying = !this.isPlaying;
+		this.controlManager.toggleControls();
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
 		this.updatePlayControls();
@@ -139,6 +140,7 @@ class PlayState extends FlxState {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
 					this.controlManager.resetControlHighlights();
+					this.controlManager.toggleControls();
 					this.isPlaying = false;
 					return;
 				}
@@ -146,14 +148,16 @@ class PlayState extends FlxState {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
 					this.controlManager.resetControlHighlights();
+					this.controlManager.toggleControls();
 					this.isPlaying = false;
 					return;
 				}
 
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
-				this.isPlaying = false;
 				this.controlManager.resetControlHighlights();
+				this.controlManager.toggleControls();
+				this.isPlaying = false;
 				FlxG.camera.flash(FlxColor.WHITE, 0.1);
 				this.updatePlayControls();
 			}
