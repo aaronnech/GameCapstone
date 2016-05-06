@@ -88,7 +88,7 @@ class PlayState extends FlxState {
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
-        var backButton = new FlxButton(400, FlxG.height - 40, "Menu", this.onClickBack);
+        var backButton = new FlxButton(10, 10, "Menu", this.onClickBack);
 
         add(backButton);
         add(this.playButton);
@@ -107,7 +107,6 @@ class PlayState extends FlxState {
 		}
 
 		this.isPlaying = !this.isPlaying;
-		this.controlManager.disableControls();
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
 	}
@@ -121,7 +120,10 @@ class PlayState extends FlxState {
 
 		if (this.isPlaying) {
 			this.playButton.loadGraphic("assets/images/stop.png");
+			this.controlManager.disableControls();
 		} else {
+			this.controlManager.enableControls();
+			this.controlManager.resetControlHighlights();
 			this.playButton.loadGraphic("assets/images/play.png");
 		}
 	}
@@ -153,24 +155,18 @@ class PlayState extends FlxState {
 				this.spriteManager.update();
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
-					this.controlManager.resetControlHighlights();
-					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
 			} else {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
-					this.controlManager.resetControlHighlights();
-					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
 
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
-				this.controlManager.resetControlHighlights();
-				this.controlManager.enableControls();
 				this.isPlaying = false;
 				FlxG.camera.flash(FlxColor.WHITE, 0.1);
 			}
@@ -178,7 +174,6 @@ class PlayState extends FlxState {
 			this.totalElapsed = 0;
 		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
-			this.controlManager.resetControlHighlights();
 		}
 
 		this.updatePlayControls();
