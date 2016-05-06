@@ -115,8 +115,6 @@ class ControlManager {
             button.trackColor = this.getTrackColorUnderMouse(mouseX, mouseY);
             button.x = this.trackLeftmostX + colors.indexOf(button.trackColor) * tileSize + 1;
 
-
-
             var tileY = Math.floor(mouseY / this.tileSize);
             this.addControl(button.trackColor, button, button.control, tileY);
         }
@@ -209,6 +207,14 @@ class ControlManager {
 
     public function getControls():HashMap<Color, Array<Control>> {
         return this.controls;
+    }
+
+    public function hasControls() {
+        var numControls = 0;
+        for (color in this.colors) {
+            numControls += this.controls.get(color).length;
+        }
+        return numControls > 0;
     }
 
     public function enableControls() {
