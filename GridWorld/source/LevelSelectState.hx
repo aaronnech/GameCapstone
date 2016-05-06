@@ -52,7 +52,7 @@ class LevelSelectState extends FlxState
 			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'playstate', index);
 			FlxG.switchState(new PlayState(this.levels, index));
 		} else {
-			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'disabledplaystate', index);
+			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'disabled-playstate', index);
 		}
 	}
 

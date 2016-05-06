@@ -28,10 +28,12 @@ class PlayState extends FlxState {
 	private var isPlaying:Bool;
 	private var playButton:FlxButton;
 	private var helpText:FlxText;
+	private var levelIndex:Int;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
 		AnalyticsAPI.emitEvent('progress', 'levels', 'start', cur);
+		this.levelIndex = cur;
 		this.level = levels[cur];
 		this.levels = levels;
 	}
@@ -98,13 +100,16 @@ class PlayState extends FlxState {
 		FlxG.switchState(new LevelSelectState());
 		this.isPlaying = false;
 		this.controlManager.enableControls();
-		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back');
+		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back', this.levelIndex);
 	}
 
 	private function onClickPlay():Void {
 		if (!this.controlManager.hasControls()) {
+			AnalyticsAPI.emitEvent('click', 'playstate', 'play-disabled', this.levelIndex);
 			return;
 		}
+
+		AnalyticsAPI.emitEvent('click', 'playstate', 'play-enabled', this.levelIndex);
 
 		this.isPlaying = !this.isPlaying;
 		this.mainSimulator.reset();
@@ -164,6 +169,8 @@ class PlayState extends FlxState {
 					this.isPlaying = false;
 					return;
 				}
+
+				AnalyticsAPI.emitEvent('event', 'playstate', 'crash', this.levelIndex);
 
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
