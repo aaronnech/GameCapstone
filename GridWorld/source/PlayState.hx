@@ -27,6 +27,7 @@ class PlayState extends FlxState {
 	private var controls:HashMap<Color, Array<Control>>;
 	private var isPlaying:Bool;
 	private var playButton:FlxButton;
+	private var helpText:FlxText;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
@@ -99,13 +100,22 @@ class PlayState extends FlxState {
 	}
 
 	private function onClickPlay():Void {
+		if (this.controlManager.hasControls()) {
+			return;
+		}
+
 		this.isPlaying = !this.isPlaying;
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
-		this.updatePlayControls();
 	}
 
 	private function updatePlayControls():Void {
+		if (this.controlManager.hasControls()) {
+			this.playButton.alpha = 1.0;
+		} else {
+			this.playButton.alpha = 0.5;
+		}
+
 		if (this.isPlaying) {
 			this.playButton.loadGraphic("assets/images/stop.png");
 		} else {
@@ -155,7 +165,6 @@ class PlayState extends FlxState {
 				this.isPlaying = false;
 				this.controlManager.resetControlHighlights();
 				FlxG.camera.flash(FlxColor.WHITE, 0.1);
-				this.updatePlayControls();
 			}
 
 			this.totalElapsed = 0;
@@ -163,5 +172,7 @@ class PlayState extends FlxState {
 			this.totalElapsed = 0;
 			this.controlManager.resetControlHighlights();
 		}
+
+		this.updatePlayControls();
 	}
 }
