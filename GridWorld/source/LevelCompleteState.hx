@@ -15,6 +15,7 @@ class LevelCompleteState extends FlxState {
 	private var levels:Array<Level>;
 	private var nextIndex:Int;
 	private var score:Int;
+	private var yaySound:FlxSound;
 
 	public function new(levels:Array<Level>, nextIndex:Int, score:Int) {
 		super();
@@ -37,6 +38,9 @@ class LevelCompleteState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		this.yaySound = FlxG.sound.load("assets/sounds/yay.wav");
+		this.yaySound.play();
+
 		FlxG.mouse.visible = true;
 
 		var backdrop = new FlxBackdrop('assets/images/playbg.png');
