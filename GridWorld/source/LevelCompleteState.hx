@@ -18,7 +18,9 @@ class LevelCompleteState extends FlxState {
 
 	public function new(levels:Array<Level>, nextIndex:Int, score:Int) {
 		super();
-		AnalyticsAPI.emitEvent('progress', 'levels', 'completed', nextIndex - 1);
+		AnalyticsAPI.emitEvent('progress', 'levelcompletestate', 'completed', nextIndex - 1);
+		AnalyticsAPI.emitEvent('score', 'levelcompletestate', 'completed', score);
+
 		this.levels = levels;
 		this.nextIndex = nextIndex;
 		this.score = score;
@@ -46,6 +48,8 @@ class LevelCompleteState extends FlxState {
 			next.screenCenter();
 			next.x += 100;
 			add(next);
+		} else {
+			AnalyticsAPI.emitEvent('progress', 'levelcompletestate', 'completed-all');
 		}
 
 		var redo = new FlxButton(0, 0, "", clickRedo);

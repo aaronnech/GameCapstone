@@ -29,10 +29,13 @@ class PlayState extends FlxState {
 	private var controls:HashMap<Color, Array<Control>>;
 	private var isPlaying:Bool;
 	private var playButton:FlxButton;
+	private var helpText:FlxText;
+	private var levelIndex:Int;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
 		AnalyticsAPI.emitEvent('progress', 'levels', 'start', cur);
+		this.levelIndex = cur;
 		this.level = levels[cur];
 		this.levels = levels;
 	}
@@ -64,14 +67,14 @@ class PlayState extends FlxState {
 			this.level.getTileSize(),
 			FlxTilemapAutoTiling.OFF, 0, 0
 		);
-		this.tileMap.x = 20;
-		this.tileMap.y = 20;
+		this.tileMap.x = 80;
+		this.tileMap.y = 50;
 		this.add(this.tileMap);
 
 		// Objects
 		this.spriteManager = new ObjectManager(this.mainSimulator, this.level.getTileSize());
-		this.spriteManager.xOffset = 20;
-		this.spriteManager.yOffset = 20;
+		this.spriteManager.xOffset = 80;
+		this.spriteManager.yOffset = 50;
 		this.spriteManager.generate();
 		var sprites = this.spriteManager.getSprites();
 		for (sprite in sprites) {
@@ -93,7 +96,7 @@ class PlayState extends FlxState {
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
-        var backButton = new FlxButton(400, FlxG.height - 40, "Menu", this.onClickBack);
+        var backButton = new FlxButton(10, 10, "Menu", this.onClickBack);
 
         add(backButton);
         add(this.playButton);
@@ -103,21 +106,35 @@ class PlayState extends FlxState {
 		FlxG.switchState(new LevelSelectState());
 		this.isPlaying = false;
 		this.controlManager.enableControls();
-		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back');
+		AnalyticsAPI.emitEvent('navigation', 'playstate', 'back', this.levelIndex);
 	}
 
 	private function onClickPlay():Void {
+		if (!this.controlManager.hasControls()) {
+			AnalyticsAPI.emitEvent('click', 'playstate', 'play-disabled', this.levelIndex);
+			return;
+		}
+
+		AnalyticsAPI.emitEvent('click', 'playstate', 'play-enabled', this.levelIndex);
+
 		this.isPlaying = !this.isPlaying;
-		this.controlManager.disableControls();
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
-		this.updatePlayControls();
 	}
 
 	private function updatePlayControls():Void {
+		if (this.controlManager.hasControls()) {
+			this.playButton.alpha = 1.0;
+		} else {
+			this.playButton.alpha = 0.5;
+		}
+
 		if (this.isPlaying) {
 			this.playButton.loadGraphic("assets/images/stop.png");
+			this.controlManager.disableControls();
 		} else {
+			this.controlManager.enableControls();
+			this.controlManager.resetControlHighlights();
 			this.playButton.loadGraphic("assets/images/play.png");
 		}
 	}
@@ -149,34 +166,30 @@ class PlayState extends FlxState {
 				this.spriteManager.update();
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
-					this.controlManager.resetControlHighlights();
-					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
 			} else {
 				if (this.mainSimulator.didUserWin()) {
 					haxe.Timer.delay(this.endLevel, Std.int(PlayState.TICK_TIME * 1000));
-					this.controlManager.resetControlHighlights();
-					this.controlManager.enableControls();
 					this.isPlaying = false;
 					return;
 				}
 
+				AnalyticsAPI.emitEvent('event', 'playstate', 'crash', this.levelIndex);
+
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
-				this.controlManager.resetControlHighlights();
-				this.controlManager.enableControls();
 				this.isPlaying = false;
 				FlxG.camera.flash(FlxColor.WHITE, 0.1);
-				this.updatePlayControls();
 			}
 
 			this.totalElapsed = 0;
 		} else if (!this.isPlaying) {
 			this.totalElapsed = 0;
-			this.controlManager.resetControlHighlights();
 		}
+
+		this.updatePlayControls();
 	}
 
 	private function dragAndDropTutorial() {
