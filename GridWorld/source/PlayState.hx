@@ -125,6 +125,8 @@ class PlayState extends FlxState {
 	}
 
 	private function endLevel():Void {
+		this.isPlaying = false;
+		this.controlManager.enableControls();
 		FlxG.camera.fade(FlxColor.BLACK, 0.33, false, function() {
 			FlxG.switchState(new LevelCompleteState(this.levels, this.level.number, this.mainSimulator.getScore()));
 		});

@@ -115,19 +115,16 @@ class ControlManager {
             button.trackColor = this.getTrackColorUnderMouse(mouseX, mouseY);
             button.x = this.trackLeftmostX + colors.indexOf(button.trackColor) * tileSize + 1;
 
-            // TODO: Sort Y position of button
-            // put at end for now
+
+
             var tileY = Math.floor(mouseY / this.tileSize);
-
-            // Clear mouse hover data
-            for (color in this.colors) {
-                this.mouseOverTrack.set(color, -1);
-            }
-
             this.addControl(button.trackColor, button, button.control, tileY);
         }
 
-
+        // Clear mouse hover data
+        for (color in this.colors) {
+            this.mouseOverTrack.set(color, -1);
+        }
     }
 
     // Add control to end if index > length.
