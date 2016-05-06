@@ -29,6 +29,8 @@ class PlayState extends FlxState {
 	private var playButton:FlxButton;
 	private var helpText:FlxText;
 	private var levelIndex:Int;
+	private var tickSound:FlxSound;
+	private var crashSound:FlxSound;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
@@ -42,6 +44,9 @@ class PlayState extends FlxState {
 		super.create();
 		var backdrop = new FlxBackdrop('assets/images/playbg.png');
 		add(backdrop);
+
+		this.tickSound = FlxG.sound.load("assets/sounds/carmove.wav");
+		this.crashSound = FlxG.sound.load("assets/sounds/carcrash.wav");
 
 		this.isPlaying = false;
 
@@ -156,6 +161,7 @@ class PlayState extends FlxState {
 		if (this.isPlaying && this.totalElapsed > PlayState.TICK_TIME) {
 			// Advance highlighted control indices in the ControlManager
 			this.controlManager.updateControlHighlights();
+			this.tickSound.play();
 			if (this.mainSimulator.tick()) {
 				this.spriteManager.update();
 				if (this.mainSimulator.didUserWin()) {
@@ -171,6 +177,8 @@ class PlayState extends FlxState {
 				}
 
 				AnalyticsAPI.emitEvent('event', 'playstate', 'crash', this.levelIndex);
+
+				this.crashSound.play();
 
 				this.mainSimulator.reset();
 				this.spriteManager.snap();
