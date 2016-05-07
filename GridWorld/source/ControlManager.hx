@@ -108,7 +108,7 @@ class ControlManager {
 
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
-        if (mouseX < this.trackLeftmostX || mouseX > FlxG.width) {
+        if (mouseX < this.trackLeftmostX) {
             AnalyticsAPI.emitEvent('click', 'playstate', 'delete-sequence',
                 this.ordering.indexOf(button.control));
             button.destroy();
