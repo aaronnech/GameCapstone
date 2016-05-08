@@ -143,6 +143,7 @@ class ControlManager {
         }
         colorButtons.insert(index, button);
         colorControls.insert(index, control);
+        this.repositionButtons(color);
     }
 
     public function removeControl(color:Color, index:Int) {
@@ -168,6 +169,13 @@ class ControlManager {
         var colorButtons = this.buttons.get(color);
         for (x in i...colorButtons.length) {
             colorButtons[x].y += shift;
+        }
+    }
+
+    private function repositionButtons(color:Color) {
+        var colorButtons = this.buttons.get(color);
+        for (i in 0...colorButtons.length) {
+            colorButtons[i].y = i * this.tileSize;
         }
     }
 
@@ -199,7 +207,9 @@ class ControlManager {
     }
 
     private function getTrackColorUnderMouse(mouseX:Int, mouseY:Int) {
-        if (mouseX >= this.trackLeftmostX) {
+        if (mouseX > FlxG.width) {
+            return colors[colors.length - 1];
+        } else if (mouseX >= this.trackLeftmostX) {
             for (i in 0...this.colors.length) {
                 if (mouseX < this.trackLeftmostX + (i + 1) * tileSize) {
                     return colors[i];
