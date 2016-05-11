@@ -141,6 +141,10 @@ class ControlManager {
                 this.ordering.indexOf(button.control));
         var colorButtons = this.buttons.get(color);
         var colorControls = this.controls.get(color);
+        if (colorButtons.length >= this.trackHeight) {
+            button.destroy();
+            return;
+        }
         if (index > colorButtons.length) {
             index = colorButtons.length;
         }
@@ -175,6 +179,9 @@ class ControlManager {
 
     private function shiftButtons(i:Int, color:Color, shift:Int) {
         var colorButtons = this.buttons.get(color);
+        if (colorButtons.length >= this.trackHeight) {
+            return;
+        }
         for (x in i...colorButtons.length) {
             colorButtons[x].y += shift;
         }
