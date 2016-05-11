@@ -198,6 +198,10 @@ class PlayState extends FlxState {
 			this.totalElapsed = 0;
 		}
 
+		if (FlxG.keys.anyJustPressed([P, ENTER])) {
+			this.onClickPlay();
+		}
+		this.controlManager.keyboardControls();
 		this.updatePlayControls();
 	}
 

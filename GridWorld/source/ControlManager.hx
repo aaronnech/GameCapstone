@@ -20,6 +20,8 @@ class ControlManager {
     private var colors:Array<Color>;
     private var buttons:HashMap<Color, Array<ControlButton>>;
     private var controls:HashMap<Color, Array<Control>>;
+    private var controlsEnabled:Bool;
+    private var selectedTrack:Int;
 
     private var ordering:Array<Control>;
     private var highlighted_files:Array<String>;
@@ -45,6 +47,8 @@ class ControlManager {
         this.simulator = simulator;
         this.buttons = new HashMap();
         this.controls = new HashMap();
+        this.controlsEnabled = true;
+        this.selectedTrack = -1;
         this.mouseOverTrack = new HashMap();
 
         for (i in 0...colors.length) {
@@ -122,11 +126,9 @@ class ControlManager {
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
-            button.trackColor = this.getTrackColorUnderMouse(mouseX, mouseY);
-            button.x = this.trackLeftmostX + colors.indexOf(button.trackColor) * tileSize + 1;
-
+            var buttonColor = this.getTrackColorUnderMouse(mouseX, mouseY);
             var tileY = Math.floor(mouseY / this.tileSize);
-            this.addControl(button.trackColor, button, button.control, tileY);
+            this.addControl(buttonColor, button, tileY);
         }
 
         // Clear mouse hover data
@@ -136,7 +138,7 @@ class ControlManager {
     }
 
     // Add control to end if index > length.
-    public function addControl(color:Color, button:ControlButton, control:Control, index:Int) {
+    public function addControl(color:Color, button:ControlButton, index:Int) {
         AnalyticsAPI.emitEvent('click', 'playstate', 'add-sequence',
                 this.ordering.indexOf(button.control));
         var colorButtons = this.buttons.get(color);
@@ -148,13 +150,15 @@ class ControlManager {
         if (index > colorButtons.length) {
             index = colorButtons.length;
         }
+        button.trackColor = color;
         button.putOnTrack(index);
+        button.x = this.trackLeftmostX + colors.indexOf(color) * tileSize + 1;
         button.y = index * tileSize;
         for (i in index...colorButtons.length) {
             colorButtons[i].indexOnTrack += 1;
         }
         colorButtons.insert(index, button);
-        colorControls.insert(index, control);
+        colorControls.insert(index, button.control);
         this.repositionButtons(color);
     }
 
@@ -247,11 +251,63 @@ class ControlManager {
     }
 
     public function enableControls() {
+        this.controlsEnabled = true;
         FlxMouseControl.mouseZone = FlxG.worldBounds;
     }
 
     public function disableControls() {
+        this.controlsEnabled = false;
         FlxMouseControl.mouseZone = new FlxRect(10, FlxG.height - 70, 70, 70);
+    }
+
+    public function keyboardControls() {
+        if (!this.controlsEnabled) {
+            return;
+        }
+        if (this.selectedTrack != -1) {
+            var selectedColor = this.colors[this.selectedTrack];
+            var colorButtons = this.buttons.get(selectedColor);
+            if (colorButtons.length < this.trackHeight) {
+                if (FlxG.keys.anyJustPressed([W, UP])) {
+                    var forward = new ControlButton(0, 0,
+                        "assets/images/forward.png", this, Control.FORWARD);
+                    this.addControl(selectedColor, forward, colorButtons.length);
+                    this.parentState.add(forward);
+                }
+                if (FlxG.keys.anyJustPressed([A, LEFT])) {
+                    var left = new ControlButton(0, 0,
+                        "assets/images/left.png", this, Control.LEFT);
+                    this.addControl(selectedColor, left, colorButtons.length);
+                    this.parentState.add(left);
+                }
+                if (FlxG.keys.anyJustPressed([D, RIGHT])) {
+                    var right = new ControlButton(0, 0,
+                        "assets/images/right.png", this, Control.RIGHT);
+                    this.addControl(selectedColor, right, colorButtons.length);
+                    this.parentState.add(right);
+                }
+                if (FlxG.keys.anyJustPressed([S, DOWN])) {
+                    var pause = new ControlButton(0, 0,
+                        "assets/images/pause.png", this, Control.PAUSE);
+                    this.addControl(selectedColor, pause, colorButtons.length);
+                    this.parentState.add(pause);
+                }
+            }
+            if (FlxG.keys.anyJustPressed([BACKSPACE, DELETE])) {
+                if (colorButtons.length > 0) {
+                    this.controls.get(selectedColor).pop();
+                    colorButtons.pop().destroy();
+                }
+            }
+        }
+
+        if (FlxG.keys.anyJustPressed([SPACE])) {
+            // Toggle selected track.
+            this.selectedTrack += 1;
+            if (this.selectedTrack == this.colors.length) {
+                this.selectedTrack = -1;
+            }
+        }
     }
 
     public function updateControlHighlights() {
