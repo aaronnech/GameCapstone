@@ -4,13 +4,17 @@ import haxe.ds.HashMap;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.FlxSprite;
+import flixel.tile.FlxTilemap;
+import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.math.FlxRect;
+
 import flixel.addons.plugin.FlxMouseControl;
 
 class ControlManager {
     public var trackLeftmostX:Int;
     public var tileSize:Int;
 
+    private var trackHeight:Int;
     private var parentState:PlayState;
     private var simulator:Simulator;
     private var colors:Array<Color>;
@@ -27,6 +31,7 @@ class ControlManager {
 
     public function new(
         tileSize:Int,
+        height:Int,
         colors:Array<Color>,
         bannedControls:Array<Control>,
         simulator:Simulator,
@@ -35,6 +40,7 @@ class ControlManager {
         this.trackLeftmostX = FlxG.width - colors.length * tileSize;
         this.parentState = parent;
         this.colors = colors;
+        this.trackHeight = height;
         this.tileSize = tileSize;
         this.simulator = simulator;
         this.buttons = new HashMap();
@@ -48,14 +54,16 @@ class ControlManager {
 
             // Make tracks
             var trackX = FlxG.width - tileSize * (colors.length - i);
-            var track = new FlxSprite(trackX, 0);
-            var color = 0x00000000;
+            var track = new FlxTilemap();
+            var img = "assets/images/";
             if (colors[i].color == "blue") {
-                color = 0x8800BFFF;
+                img += "bluetrack.png";
             } else if (colors[i].color == "red") {
-                color = 0x88E3C934; // yellow
+                img += "yellowtrack.png";
             }
-            track.makeGraphic(tileSize, FlxG.height, color);
+            track.loadMapFrom2DArray([for (_ in 0...this.trackHeight) [0]], img, tileSize, tileSize, FlxTilemapAutoTiling.OFF, 0, 0);
+            track.setPosition(trackX, 0);
+            track.alpha = 1;
             this.parentState.add(track);
         }
 

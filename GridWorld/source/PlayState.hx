@@ -56,7 +56,7 @@ class PlayState extends FlxState {
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
 
 		// Create control panel
-		this.controlManager = new ControlManager(70, this.level.getColors(),
+		this.controlManager = new ControlManager(70, 6, this.level.getColors(),
 												 this.level.getBannedControls(),
 												 this.mainSimulator, this);
 		this.controls = this.controlManager.getControls();
