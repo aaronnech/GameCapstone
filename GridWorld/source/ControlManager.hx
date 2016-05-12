@@ -22,6 +22,7 @@ class ControlManager {
     private var controls:HashMap<Color, Array<Control>>;
     private var controlsEnabled:Bool;
     private var selectedTrack:Int;
+    private var tracks:Array<FlxTilemap>;
 
     private var ordering:Array<Control>;
     private var highlighted_files:Array<String>;
@@ -49,6 +50,7 @@ class ControlManager {
         this.controls = new HashMap();
         this.controlsEnabled = true;
         this.selectedTrack = -1;
+        this.tracks = new Array();
         this.mouseOverTrack = new HashMap();
 
         for (i in 0...colors.length) {
@@ -67,7 +69,8 @@ class ControlManager {
             }
             track.loadMapFrom2DArray([for (_ in 0...this.trackHeight) [0]], img, tileSize, tileSize, FlxTilemapAutoTiling.OFF, 0, 0);
             track.setPosition(trackX, 0);
-            track.alpha = 1;
+            track.alpha = 0.5;
+            this.tracks.push(track);
             this.parentState.add(track);
         }
 
@@ -303,9 +306,16 @@ class ControlManager {
 
         if (FlxG.keys.anyJustPressed([SPACE])) {
             // Toggle selected track.
+            if (this.selectedTrack != -1) {
+                // Deselect previous track
+                this.tracks[this.selectedTrack].alpha = 0.5;
+            }
+
             this.selectedTrack += 1;
             if (this.selectedTrack == this.colors.length) {
                 this.selectedTrack = -1;
+            } else {
+                this.tracks[this.selectedTrack].alpha = 1;
             }
         }
     }
