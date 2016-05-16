@@ -10,7 +10,7 @@ class AnalyticsAPI {
     	#elseif flash
     		myURL = ((new flash.net.LocalConnection()).domain);
     	#end
-
+    	trace(myURL);
         Stats.init('UA-77349792-1', myURL);
     }
 
