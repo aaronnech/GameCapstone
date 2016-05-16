@@ -18,6 +18,7 @@ class ControlManager {
     private var parentState:PlayState;
     private var simulator:Simulator;
     private var colors:Array<Color>;
+    private var bannedControls:Array<Control>;
     private var buttons:HashMap<Color, Array<ControlButton>>;
     private var controls:HashMap<Color, Array<Control>>;
     private var controlsEnabled:Bool;
@@ -41,11 +42,12 @@ class ControlManager {
         parent:PlayState
     ) {
         this.trackLeftmostX = FlxG.width - colors.length * tileSize;
-        this.parentState = parent;
-        this.colors = colors;
-        this.trackHeight = height;
         this.tileSize = tileSize;
+        this.trackHeight = height;
+        this.colors = colors;
+        this.bannedControls = bannedControls;
         this.simulator = simulator;
+        this.parentState = parent;
         this.buttons = new HashMap();
         this.controls = new HashMap();
         this.controlsEnabled = true;
@@ -74,7 +76,7 @@ class ControlManager {
             this.parentState.add(track);
         }
 
-        this.makeButtons(bannedControls);
+        this.makeButtons();
 
         this.ordering = new Array();
         this.ordering.push(Control.FORWARD);
@@ -95,23 +97,23 @@ class ControlManager {
         this.normal_files.push("assets/images/pause.png");
     }
 
-    private function makeButtons(bannedControls:Array<Control>) {
+    private function makeButtons() {
         FlxG.plugins.add(new flixel.addons.plugin.FlxMouseControl());
 
         var buttonY = FlxG.height - 70;
-        if (bannedControls.indexOf(Control.FORWARD) == -1) {
+        if (this.bannedControls.indexOf(Control.FORWARD) == -1) {
             var forward = new ControlButton(170, buttonY, "assets/images/forward.png", this, Control.FORWARD);
             this.parentState.add(forward);
         }
-        if (bannedControls.indexOf(Control.LEFT) == -1) {
+        if (this.bannedControls.indexOf(Control.LEFT) == -1) {
             var left = new ControlButton(100, buttonY, "assets/images/left.png", this, Control.LEFT);
             this.parentState.add(left);
         }
-        if (bannedControls.indexOf(Control.RIGHT) == -1) {
+        if (this.bannedControls.indexOf(Control.RIGHT) == -1) {
             var right = new ControlButton(240, buttonY, "assets/images/right.png", this, Control.RIGHT);
             this.parentState.add(right);
         }
-        if (bannedControls.indexOf(Control.PAUSE) == -1) {
+        if (this.bannedControls.indexOf(Control.PAUSE) == -1) {
             var pause = new ControlButton(310, buttonY, "assets/images/pause.png", this, Control.PAUSE);
             this.parentState.add(pause);
         }
@@ -269,25 +271,25 @@ class ControlManager {
             var selectedColor = this.colors[this.selectedTrack];
             var colorButtons = this.buttons.get(selectedColor);
             if (colorButtons.length < this.trackHeight) {
-                if (FlxG.keys.anyJustPressed([W, UP])) {
+                if (FlxG.keys.anyJustPressed([W, UP]) && this.bannedControls.indexOf(Control.FORWARD) == -1) {
                     var forward = new ControlButton(0, 0,
                         "assets/images/forward.png", this, Control.FORWARD);
                     this.addControl(selectedColor, forward, colorButtons.length);
                     this.parentState.add(forward);
                 }
-                if (FlxG.keys.anyJustPressed([A, LEFT])) {
+                if (FlxG.keys.anyJustPressed([A, LEFT]) && this.bannedControls.indexOf(Control.LEFT) == -1) {
                     var left = new ControlButton(0, 0,
                         "assets/images/left.png", this, Control.LEFT);
                     this.addControl(selectedColor, left, colorButtons.length);
                     this.parentState.add(left);
                 }
-                if (FlxG.keys.anyJustPressed([D, RIGHT])) {
+                if (FlxG.keys.anyJustPressed([D, RIGHT]) && this.bannedControls.indexOf(Control.RIGHT) == -1) {
                     var right = new ControlButton(0, 0,
                         "assets/images/right.png", this, Control.RIGHT);
                     this.addControl(selectedColor, right, colorButtons.length);
                     this.parentState.add(right);
                 }
-                if (FlxG.keys.anyJustPressed([S, DOWN])) {
+                if (FlxG.keys.anyJustPressed([S, DOWN]) && this.bannedControls.indexOf(Control.PAUSE) == -1) {
                     var pause = new ControlButton(0, 0,
                         "assets/images/pause.png", this, Control.PAUSE);
                     this.addControl(selectedColor, pause, colorButtons.length);

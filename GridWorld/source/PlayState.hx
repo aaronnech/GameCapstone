@@ -213,23 +213,33 @@ class PlayState extends FlxState {
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png"),
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png")
 		];
+		var cursor = new FlxSprite(185, FlxG.height - 50, "assets/images/dragcursor.png");
+		// var instructions = new FlxText()
 		var tileSize = this.controlManager.tileSize;
 		var timer = new FlxTimer();
 		var i = 0;
+		var time = 0.7;
 
 		function animateButton(timer:FlxTimer) {
-			if (i == actors.length + 1) {
+			if (i == actors.length * 2) {
 				for (actor in actors) {
 					actor.destroy();
 				}
+				cursor.destroy();
 				return;
-			} else if (i < actors.length) {
-				add(actors[i]);
-				FlxTween.tween(actors[i], {x: FlxG.width - tileSize, y: i * tileSize}, 1);
+			} else if (i < actors.length * 2 - 1) {
+				if (i % 2 == 0) {
+					var j = Std.int(i / 2);
+					add(actors[j]);
+					FlxTween.tween(actors[j], {x: FlxG.width - tileSize, y: j * tileSize}, time);
+					FlxTween.tween(cursor, {x: FlxG.width - tileSize + 10, y: j * tileSize + 10}, time);
+				} else {
+					FlxTween.tween(cursor, {x: 185, y: FlxG.height - 50}, time);
+				}
 			}
 			i += 1;
 		}
-
-		timer.start(0.7, animateButton, 5);
+		add(cursor);
+		timer.start(time + 0.3, animateButton, 7);
 	}
 }
