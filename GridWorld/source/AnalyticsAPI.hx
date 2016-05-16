@@ -8,7 +8,7 @@ class AnalyticsAPI {
     	#if js
     		myURL = js.Browser.window.location.href;
     	#elseif flash
-    		myURL = flash.external.ExternalInterface.call("window.location.href");
+    		myURL = flash.external.ExternalInterface.call('function () { return window.location.href; }');
     	#end
 
         Stats.init('UA-77349792-1', myURL);
