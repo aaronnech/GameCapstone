@@ -3,8 +3,15 @@ package;
 import googleAnalytics.Stats;
 
 class AnalyticsAPI {
-    public static function init(){
-        Stats.init('UA-77349792-1', 'cs.washington.edu');
+    public static function init() {
+    	var myURL:String = 'cs.washington.edu';
+    	#if js
+    		myURL = js.Browser.window.location.href;
+    	#elseif flash
+    		myURL = flash.external.ExternalInterface.call("window.location.href");
+    	#end
+
+        Stats.init('UA-77349792-1', myURL);
     }
 
     public static function click(screen:String, buttonName:String, lvl:Int=-1) {
