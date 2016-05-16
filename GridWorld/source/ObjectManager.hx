@@ -148,9 +148,12 @@ class ObjectManager implements SpriteManager {
         for (i in 0...gemObjs.length) {
             var gem = gemObjs[i];
             if (gem.isInGoal) {
-                this.gems.get(gem).visible = false;
-                this.goals.get(gem.parentGoal).visible = false;
-                this.gemSound.play();
+                var gemVisible = this.gems.get(gem).visible;
+                if (gemVisible) {
+                    this.gemSound.play();
+                    this.gems.get(gem).visible = false;
+                    this.goals.get(gem.parentGoal).visible = false;
+                }
             }
         }
     }
