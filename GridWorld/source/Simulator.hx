@@ -5,12 +5,14 @@ import Vehicle;
 import Goal;
 import Gem;
 import Wall;
+import OptimalLevelCount;
 
 import haxe.ds.HashMap;
 
 class Simulator {
 	public var width:Int;
 	public var height:Int;
+	public var levelNumber:Int;
 
 	private var vehicles:HashMap<Color, Array<Vehicle>>;
 	private var goals:Array<Goal>;
@@ -34,6 +36,7 @@ class Simulator {
 		this.walls = level.getWalls();
 		this.finishedGems = new Array();
 		this.goals = level.getGoals();
+		this.levelNumber = level.number;
 	}
 
 	public function getVehicles():Array<Vehicle> {
@@ -48,13 +51,25 @@ class Simulator {
 		return result;
 	}
 
-	public function getScore():Int {
-		var score = 0.0;
+	private function countNumControls():Int {
+		var count = 0;
 		for (color in this.controls.keys()) {
-			score += this.controls.get(color).length;
+			count += this.controls.get(color).length;
 		}
 
-		return Std.int(100.0 / score);
+		return count;
+	}
+
+	public function getScore():Int {
+		var numControls = this.countNumControls();
+		var difference = numControls - OptimalLevelCount.getCountForLevel(this.levelNumber);
+
+		// User found a more optimal way to solve the level
+		if (difference < 0) {
+			return 200;
+		}
+
+		return Std.int(100.0 / (difference + 1));
 	}
 
 	public function didUserWin():Bool {
@@ -187,7 +202,6 @@ class Simulator {
 				gem.parentGoal = goal;
 				this.gems.remove(gem);
 				this.finishedGems.push(gem);
-				trace('GOAL');
 				break;
 			}
 		}
