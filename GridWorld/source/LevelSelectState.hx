@@ -49,10 +49,10 @@ class LevelSelectState extends FlxState
 
 	private function startLevel(index:Int):Void {
 		if (this.save.data.highestLevel >= index) {
-			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'playstate', index);
+			AnalyticsAPI.click('levelselect', 'play-enabled-' + index);
 			FlxG.switchState(new PlayState(this.levels, index));
 		} else {
-			AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'disabled-playstate', index);
+			AnalyticsAPI.click('levelselect', 'play-disabled-' + index);
 		}
 	}
 
@@ -118,14 +118,14 @@ class LevelSelectState extends FlxState
 	}
 
 	private function onChangePage(delta:Int) {
-		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageChange', delta);
 		this.currentPage += delta;
 		this.updateNextPrevious();
-		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'pageSet', this.currentPage);
+		AnalyticsAPI.emitProgress('/levelselect/' + this.currentPage);
 	}
 
 	override public function create():Void {
 		super.create();
+		AnalyticsAPI.emitProgress('/levelselect/0');
 		this.save = new FlxSave();
 		this.save.bind("Game");
 		var backdrop = new FlxBackdrop('assets/images/justfloor.png');
@@ -161,7 +161,7 @@ class LevelSelectState extends FlxState
 	}
 
 	private function clickBack():Void {
-		AnalyticsAPI.emitEvent('navigation', 'levelselectstate', 'mainMenu');
+		AnalyticsAPI.click('levelselect', 'back');
 		FlxG.switchState(new MenuState());
 	}
 

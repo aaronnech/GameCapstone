@@ -140,6 +140,41 @@ class Simulator {
 			}
 		}
 
+		// Check that no cars ghosted through one another
+		for (i in 0...allVehicles.length) {
+			var vehicle = allVehicles[i];
+			for (j in 0...allVehicles.length) {
+				if (i == j) {
+					continue;
+				}
+
+				var badCollision = false;
+				var other = allVehicles[j];
+
+				var vehicleControls = this.controls.get(vehicle.color);
+				var otherControls = this.controls.get(other.color);
+
+				var vehicleIndex = this.controlIndices.get(vehicle.color);
+				var otherIndex = this.controlIndices.get(other.color);
+
+				vehicleIndex = (vehicleIndex == 0) ? vehicleControls.length - 1 : vehicleIndex - 1;
+				otherIndex = (otherIndex == 0) ? otherControls.length - 1 : otherIndex - 1;
+
+				vehicle.undoControl(vehicleControls[vehicleIndex], this);
+				if (vehicle.x == other.x && vehicle.y == other.y) {
+					badCollision = true;
+				}
+
+				vehicle.updateWithControl(vehicleControls[vehicleIndex], this);
+				other.undoControl(otherControls[otherIndex], this);
+				if (vehicle.x == other.x && vehicle.y == other.y && badCollision) {
+					return false;
+				}
+
+				other.updateWithControl(otherControls[otherIndex], this);
+			}
+		}
+
 		var allObjects:Array<Dynamic> = allVehicles.concat(this.gems);
 		return !checkCollisions(allObjects);
 	}

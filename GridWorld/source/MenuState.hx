@@ -17,6 +17,7 @@ class MenuState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		AnalyticsAPI.emitProgress('/mainmenu');
 		FlxG.mouse.visible = true;
 
 		backdrop = new FlxBackdrop('assets/images/justfloor.png');
@@ -36,6 +37,7 @@ class MenuState extends FlxState {
 	}
 
 	private function clickPlay():Void {
+		AnalyticsAPI.click('mainmenu', 'play');
 		FlxG.switchState(new LevelSelectState());
 	}
 }
