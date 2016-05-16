@@ -9,7 +9,7 @@ class Main extends Sprite
 	{
 		super();
 		AnalyticsAPI.init();
-		AnalyticsAPI.emitEvent('lifecycle', 'initialization', 'startup');
+		AnalyticsAPI.emitProgress('/init');
 		addChild(new FlxGame(640, 480, MenuState, 1, 60, 60, true));
 	}
 }
