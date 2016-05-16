@@ -24,7 +24,7 @@ class ControlButton extends FlxExtendedSprite {
 
         this.mouseStartDragCallback = duplicateButton;
         this.mouseStopDragCallback = stopDragCallback;
-        enableMouseDrag();
+        this.enableMouseDrag();
     }
 
     public function putOnTrack(index:Int) {
