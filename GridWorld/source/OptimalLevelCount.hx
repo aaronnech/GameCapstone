@@ -21,7 +21,11 @@ class OptimalLevelCount {
 		17 => 3,
 		18 => 3,
 		19 => 7,
-		20 => 8
+		20 => 7,
+		21 => 9,
+		22 => 9,
+		23 => 8,
+		24 => 10
 	];
 
 	public static function getCountForLevel(levelNumber:Int):Int {

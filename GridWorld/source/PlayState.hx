@@ -52,17 +52,6 @@ class PlayState extends FlxState {
 
 		this.isPlaying = false;
 
-		// FlxG.mouse.visible = false;
-		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
-
-		// Create control panel
-		this.controlManager = new ControlManager(70, 6, this.level.getColors(),
-												 this.level.getBannedControls(),
-												 this.mainSimulator, this);
-		this.controls = this.controlManager.getControls();
-
-		this.mainSimulator.onSetControls(this.controls);
-
 		// Background tile map
 		this.tileMap = new FlxTilemap();
 		this.tileMap.loadMapFrom2DArray(
@@ -76,6 +65,16 @@ class PlayState extends FlxState {
 		this.tileMap.y = 50;
 		this.add(this.tileMap);
 
+		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
+
+		// Create control panel
+		this.controlManager = new ControlManager(70, 6, this.level.getColors(),
+												 this.level.getBannedControls(),
+												 this.mainSimulator, this);
+		this.controls = this.controlManager.getControls();
+
+		this.mainSimulator.onSetControls(this.controls);
+
 		// Objects
 		this.spriteManager = new ObjectManager(this.mainSimulator, this.level.getTileSize());
 		this.spriteManager.xOffset = 80;
@@ -88,6 +87,7 @@ class PlayState extends FlxState {
 
 		// UI
 		this.createUI();
+		add(new FlxText(110, 10, "Level " + (this.levelIndex + 1), 14));
 
 		if (level.number == 1) {
 			this.dragAndDropTutorial();
@@ -214,7 +214,10 @@ class PlayState extends FlxState {
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png")
 		];
 		var cursor = new FlxSprite(185, FlxG.height - 50, "assets/images/dragcursor.png");
-		// var instructions = new FlxText()
+		var instructions = new FlxText(250, FlxG.height - 45, 300, "", 12);
+		instructions.text = "drag and drop sequences into the track";
+		var goal = new FlxText(105, 150, 300, 12);
+		goal.text = "push the matching gem into the goal";
 		var tileSize = this.controlManager.tileSize;
 		var timer = new FlxTimer();
 		var i = 0;
@@ -240,6 +243,8 @@ class PlayState extends FlxState {
 			i += 1;
 		}
 		add(cursor);
+		add(instructions);
+		add(goal);
 		timer.start(time + 0.3, animateButton, 7);
 	}
 }
