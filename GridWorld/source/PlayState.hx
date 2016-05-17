@@ -214,7 +214,10 @@ class PlayState extends FlxState {
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png")
 		];
 		var cursor = new FlxSprite(185, FlxG.height - 50, "assets/images/dragcursor.png");
-		// var instructions = new FlxText()
+		var instructions = new FlxText(250, FlxG.height - 45, 300, "", 12);
+		instructions.text = "drag and drop sequences into the track";
+		var goal = new FlxText(105, 150, 300, 12);
+		goal.text = "push the matching gem into the goal";
 		var tileSize = this.controlManager.tileSize;
 		var timer = new FlxTimer();
 		var i = 0;
@@ -240,6 +243,8 @@ class PlayState extends FlxState {
 			i += 1;
 		}
 		add(cursor);
+		add(instructions);
+		add(goal);
 		timer.start(time + 0.3, animateButton, 7);
 	}
 }
