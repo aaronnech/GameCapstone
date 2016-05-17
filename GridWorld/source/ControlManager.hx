@@ -132,6 +132,9 @@ class ControlManager {
             // Figure out which track this button is being dropped onto.
             var buttonColor = this.getTrackColorUnderMouse(mouseX, mouseY);
             var tileY = Math.floor(mouseY / this.tileSize);
+            if (tileY < 0) {
+                tileY = 0;
+            }
             this.addControl(buttonColor, button, tileY);
         }
 
@@ -209,7 +212,7 @@ class ControlManager {
             if (color == currentTrack) {
                 if (trackIndex != tileY) {
                     // Button's Y position changed
-                    if (trackIndex != -1) {
+                    if (tileY >= 0 && trackIndex != -1) {
                         // Undo previous shift
                         this.shiftButtonsUp(trackIndex, currentTrack);
                     }
