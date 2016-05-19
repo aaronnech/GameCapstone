@@ -87,7 +87,7 @@ class PlayState extends FlxState {
 
 		// UI
 		this.createUI();
-		add(new FlxText(110, 10, "Level " + (this.levelIndex + 1), 14));
+		add(new FlxText(110, 10, 300, "Level " + (this.levelIndex + 1), 14));
 
 		if (level.number == 1) {
 			this.dragAndDropTutorial();
