@@ -106,7 +106,7 @@ class AnalyticsAPI {
         req.setParameter("event_name", event);
         req.setParameter("event_value", "" + value);
         req.setParameter("is_a", AnalyticsAPI.isAEnabled ? "1" : "0");
-        req.request(true);
+        req.request(false);
 
         AnalyticsAPI.eventNum += 1;
     }
