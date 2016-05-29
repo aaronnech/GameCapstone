@@ -140,7 +140,6 @@ class ControlManager {
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
         if (mouseX < this.trackLeftmostX) {
-            AnalyticsAPI.emitEvent("controls", "removeControl", this.controlToInt(button.control));
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
@@ -183,6 +182,7 @@ class ControlManager {
     }
 
     public function removeControl(color:Color, index:Int) {
+        AnalyticsAPI.emitEvent("controls", "removeControl", this.controlToInt(button.control));
         var colorButtons = this.buttons.get(color);
         var colorControls = this.controls.get(color);
         colorButtons.splice(index, 1);
