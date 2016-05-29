@@ -17,7 +17,9 @@ class MenuState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		AnalyticsAPI.init();
 		AnalyticsAPI.setScreen('mainMenu');
+		AnalyticsAPI.emitEvent('progress', 'loadMainMenu');
 		FlxG.mouse.visible = true;
 
 		backdrop = new FlxBackdrop('assets/images/justfloor.png');

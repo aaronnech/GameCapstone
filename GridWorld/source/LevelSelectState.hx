@@ -126,6 +126,7 @@ class LevelSelectState extends FlxState
 	override public function create():Void {
 		super.create();
 		AnalyticsAPI.setScreen('levelSelect');
+		AnalyticsAPI.emitEvent('progress', 'loadLevelSelect');
 		this.save = new FlxSave();
 		this.save.bind("Game");
 		var backdrop = new FlxBackdrop('assets/images/justfloor.png');

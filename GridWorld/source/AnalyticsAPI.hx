@@ -12,6 +12,7 @@ class AnalyticsAPI {
     private static var host:String;
     private static var screenName:String;
     private static var isAEnabled:Bool;
+    private static var isInitialized:Bool = false;
 
     private static function genUUID() {
         return GUID.gen();
@@ -22,12 +23,15 @@ class AnalyticsAPI {
     }
 
     public static function init() {
+        if (AnalyticsAPI.isInitialized) return;
+
         // Get or set the UUID / AB Test cohort
         AnalyticsAPI.save = new FlxSave();
         AnalyticsAPI.save.bind("Game");
         if (!AnalyticsAPI.save.data.userID) {
             AnalyticsAPI.save.data.userID = AnalyticsAPI.genUUID();
             AnalyticsAPI.save.data.isAEnabled = Std.random(2) > 0;
+            AnalyticsAPI.save.flush();
         }
         AnalyticsAPI.userID = AnalyticsAPI.save.data.userID;
         AnalyticsAPI.isAEnabled = AnalyticsAPI.save.data.isAEnabled;
@@ -43,6 +47,8 @@ class AnalyticsAPI {
 
         // Event counter
         AnalyticsAPI.eventNum = 0;
+
+        AnalyticsAPI.isInitialized = true;
     }
 
     public static function click(btnCategory:String, btnName:String, enabled:Int=1) {
