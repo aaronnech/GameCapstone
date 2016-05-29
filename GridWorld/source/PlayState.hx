@@ -86,6 +86,8 @@ class PlayState extends FlxState {
 			this.add(sprite);
 		}
 
+		this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
+
 		if (level.number == 1) {
 			if (AnalyticsAPI.isA()) {
 				this.tutorialA();
@@ -101,7 +103,6 @@ class PlayState extends FlxState {
 	}
 
 	private function createUI():Void {
-        this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
