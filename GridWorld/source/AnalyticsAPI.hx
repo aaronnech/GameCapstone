@@ -19,7 +19,7 @@ class AnalyticsAPI {
         return GUID.gen();
     }
 
-    private static function isA() {
+    public static function isA() {
         return AnalyticsAPI.isAEnabled;
     }
 
