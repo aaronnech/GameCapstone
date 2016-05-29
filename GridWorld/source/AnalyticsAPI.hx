@@ -4,6 +4,7 @@ import haxe.Http;
 
 class AnalyticsAPI {
     private static var SERVER_ENDPOINT = "http://students.washington.edu/rdrapeau/";
+    private static var KEY = "COFFEEISGO123123OD_ANDLYFEBLOOD23123123";
     private static var GAME_VERSION = "1.0";
     private static var eventNum:Int;
     private static var save:FlxSave;
@@ -81,6 +82,7 @@ class AnalyticsAPI {
     public static function emitEvent(category:String, event:String, value:Int=0) {
         var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
         req.setParameter("user_id", AnalyticsAPI.userID);
+        req.setParameter("app_token", haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum));
         req.setParameter("version", "" + AnalyticsAPI.GAME_VERSION);
         req.setParameter("event_number", "" + AnalyticsAPI.eventNum);
         req.setParameter("host_name", AnalyticsAPI.host);
