@@ -90,7 +90,11 @@ class PlayState extends FlxState {
 		add(new FlxText(110, 10, 300, "Level " + (this.levelIndex + 1), 14));
 
 		if (level.number == 1) {
-			this.dragAndDropTutorial();
+			if (AnalyticsAPI.isA()) {
+				this.tutorialA();
+			} else {
+				this.tutorialB();
+			}
 		}
 
 		this.totalElapsed = 0;
@@ -207,7 +211,7 @@ class PlayState extends FlxState {
 		this.updatePlayControls();
 	}
 
-	private function dragAndDropTutorial() {
+	private function tutorialA() {
 		var actors = [
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png"),
 			new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png"),
@@ -246,5 +250,55 @@ class PlayState extends FlxState {
 		add(instructions);
 		add(goal);
 		timer.start(time + 0.3, animateButton, 7);
+	}
+
+	private function tutorialB() {
+		var timer = new haxe.Timer(500);
+		var time = 1.0;
+		var elapsed = 0;
+		var forward = new FlxSprite(170, FlxG.height - 70, "assets/images/forward.png");
+		forward.alpha = 0.5;
+		var cursor = new FlxSprite(185, FlxG.height - 50, "assets/images/dragcursor.png");
+		cursor.alpha = 0.5;
+		var dragText = new FlxText(250, FlxG.height - 45, 300, "", 12);
+		dragText.text = "click and drag sequence onto the track";
+		var playText = new FlxText(10, FlxG.height - 100, 300, "", 12);
+		playText.text = "press PLAY to start looping sequence";
+		var goalText = new FlxText(105, 150, 300, 12);
+		goalText.text = "make the bulldozer push the matching gem into the goal";
+
+		function tut_goal() {
+			if (this.isPlaying) {
+				playText.destroy();
+				add(goalText);
+				timer.stop();
+			}
+		}
+
+		function tut_play() {
+			if (this.controlManager.hasControls()) {
+				this.playButton.visible = true;
+				dragText.destroy();
+				forward.destroy();
+				cursor.destroy();
+				add(playText);
+				timer.run = tut_goal;
+			} else if (elapsed >= 2000){
+				forward.setPosition(170, FlxG.height - 70);
+				cursor.setPosition(185, FlxG.height - 50);
+				FlxTween.tween(forward, {x: FlxG.width - this.controlManager.tileSize, y: 0}, time);
+				FlxTween.tween(cursor, {x: FlxG.width - this.controlManager.tileSize + 10, y: 10}, time);
+				elapsed = 0;
+			}
+			elapsed += 500;
+		}
+
+		this.playButton.visible = false;
+		add(dragText);
+		add(forward);
+		add(cursor);
+		FlxTween.tween(forward, {x: FlxG.width - this.controlManager.tileSize, y: 0}, time);
+		FlxTween.tween(cursor, {x: FlxG.width - this.controlManager.tileSize + 10, y: 10}, time);
+		timer.run = tut_play;
 	}
 }
