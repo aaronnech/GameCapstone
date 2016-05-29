@@ -33,6 +33,7 @@ class PlayState extends FlxState {
 	private var levelIndex:Int;
 	private var tickSound:FlxSound;
 	private var crashSound:FlxSound;
+	private var helpSprite:FlxSprite;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
@@ -85,10 +86,6 @@ class PlayState extends FlxState {
 			this.add(sprite);
 		}
 
-		// UI
-		this.createUI();
-		add(new FlxText(110, 10, 300, "Level " + (this.levelIndex + 1), 14));
-
 		if (level.number == 1) {
 			if (AnalyticsAPI.isA()) {
 				this.tutorialA();
@@ -97,6 +94,9 @@ class PlayState extends FlxState {
 			}
 		}
 
+		// UI
+		add(new FlxText(210, 10, 300, "Level " + (this.levelIndex + 1), 14));
+		this.createUI();
 		this.totalElapsed = 0;
 	}
 
@@ -105,9 +105,14 @@ class PlayState extends FlxState {
 		this.playButton.loadGraphic("assets/images/stop.png");
         this.playButton.loadGraphic("assets/images/play.png");
 
-        var backButton = new FlxButton(10, 10, "Menu", this.onClickBack);
+        var backButton = new FlxButton(100, 10, "Menu", this.onClickBack);
+        var helpButton = new FlxButton(10, 10, "Shortcuts", this.onClickHelp);
+        this.helpSprite = new FlxSprite(50, 50, "assets/images/help.png");
+        helpSprite.visible = false;
 
         add(backButton);
+        add(helpButton);
+        add(helpSprite);
         add(this.playButton);
 	}
 
@@ -132,6 +137,11 @@ class PlayState extends FlxState {
 		}
 		this.mainSimulator.reset();
 		this.spriteManager.snap();
+	}
+
+	private function onClickHelp():Void {
+		this.helpSprite.visible = !this.helpSprite.visible;
+		AnalyticsAPI.click('help', 'shortcuts');
 	}
 
 	private function updatePlayControls():Void {
@@ -209,6 +219,10 @@ class PlayState extends FlxState {
 		}
 		this.controlManager.keyboardControls();
 		this.updatePlayControls();
+
+		if (this.helpSprite.visible && FlxG.mouse.justPressed) {
+			this.helpSprite.visible = false;
+		}
 	}
 
 	private function tutorialA() {
@@ -264,7 +278,7 @@ class PlayState extends FlxState {
 		dragText.text = "click and drag sequence onto the track";
 		var playText = new FlxText(10, FlxG.height - 100, 300, "", 12);
 		playText.text = "press PLAY to start looping sequence";
-		var goalText = new FlxText(105, 150, 300, 12);
+		var goalText = new FlxText(100, 150, 300, 12);
 		goalText.text = "make the bulldozer push the matching gem into the goal";
 
 		function tut_goal() {
