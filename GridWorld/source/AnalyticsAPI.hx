@@ -75,6 +75,7 @@ class AnalyticsAPI {
     public static function emitEvent(category:String, event:String, value:Int=0) {
         var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
         req.setParameter("user_id", AnalyticsAPI.userID);
+        req.setParameter("version", "" + AnalyticsAPI.GAME_VERSION);
         req.setParameter("event_number", "" + AnalyticsAPI.eventNum);
         req.setParameter("host_name", AnalyticsAPI.host);
         req.setParameter("screen_token", AnalyticsAPI.screenToken);
