@@ -80,6 +80,7 @@ class AnalyticsAPI {
     }
 
     public static function emitEvent(category:String, event:String, value:Int=0) {
+        trace("LOGGING STUFF");
         var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
         req.onData = function(msg) {
             trace("data: " + msg);
