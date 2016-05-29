@@ -182,9 +182,11 @@ class ControlManager {
     }
 
     public function removeControl(color:Color, index:Int) {
-        AnalyticsAPI.emitEvent("controls", "removeControl", this.controlToInt(button.control));
         var colorButtons = this.buttons.get(color);
         var colorControls = this.controls.get(color);
+        var button = colorButtons[index];
+        AnalyticsAPI.emitEvent("controls", "removeControl", this.controlToInt(button.control));
+
         colorButtons.splice(index, 1);
         colorControls.splice(index, 1);
         for (i in index...colorButtons.length) {
