@@ -81,6 +81,18 @@ class AnalyticsAPI {
 
     public static function emitEvent(category:String, event:String, value:Int=0) {
         var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
+        req.onData = function(msg) {
+            trace("data: " + msg);
+        };
+
+        req.onError = function(msg) {
+            trace("error: " + msg);
+        };
+
+        req.onStatus = function(msg) {
+            trace("status: " + msg);
+        };
+
         // req.addHeader("Access-Control-Allow-Origin", "*");
         req.setParameter("user_id", AnalyticsAPI.userID);
         req.setParameter("app_token", haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum));
