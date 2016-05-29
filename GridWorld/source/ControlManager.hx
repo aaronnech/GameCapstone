@@ -126,7 +126,7 @@ class ControlManager {
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
         if (mouseX < this.trackLeftmostX) {
-            AnalyticsAPI.click('play', 'delete-sequence');
+            AnalyticsAPI.emitEvent("controls", "removeControl", cast(button.control, Int));
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
@@ -146,7 +146,7 @@ class ControlManager {
 
     // Add control to end if index > length.
     public function addControl(color:Color, button:ControlButton, index:Int) {
-        AnalyticsAPI.click('play', 'add-sequence');
+        AnalyticsAPI.emitEvent("controls", "addControl", cast(button.control, Int));
         var colorButtons = this.buttons.get(color);
         var colorControls = this.controls.get(color);
         if (colorButtons.length >= this.trackHeight) {
