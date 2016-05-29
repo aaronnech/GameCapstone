@@ -122,7 +122,7 @@ class AnalyticsAPI {
             var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
             urlRequest.url=url;
             //flash have unspoken error that can happen nonetheless due to denied DNS resolution...
-            l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
+            l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, function(foo){});
             try{ l.load(urlRequest); }catch(e:Dynamic){}
         #end
 
