@@ -119,6 +119,20 @@ class ControlManager {
         }
     }
 
+    public function controlToInt(ctrl:Control) {
+        if (ctrl == Control.FORWARD) {
+            return 0;
+        } else if (ctrl == Control.LEFT) {
+            return 1;
+        } else if (ctrl == Control.RIGHT) {
+            return 2;
+        } else {
+            return 3;
+        }
+
+        return -1;
+    }
+
     public function duplicateButton(button:ControlButton) {
         this.parentState.add(button.copy());
     }
@@ -126,7 +140,7 @@ class ControlManager {
     public function dropButton(button:ControlButton, mouseX:Int, mouseY:Int) {
         // determine where button was dropped and update array
         if (mouseX < this.trackLeftmostX) {
-            AnalyticsAPI.emitEvent("controls", "removeControl", cast(button.control, Int));
+            AnalyticsAPI.emitEvent("controls", "removeControl", this.controlToInt(button.control));
             button.destroy();
         } else {
             // Figure out which track this button is being dropped onto.
@@ -146,7 +160,7 @@ class ControlManager {
 
     // Add control to end if index > length.
     public function addControl(color:Color, button:ControlButton, index:Int) {
-        AnalyticsAPI.emitEvent("controls", "addControl", cast(button.control, Int));
+        AnalyticsAPI.emitEvent("controls", "addControl", this.controlToInt(button.control));
         var colorButtons = this.buttons.get(color);
         var colorControls = this.controls.get(color);
         if (colorButtons.length >= this.trackHeight) {
