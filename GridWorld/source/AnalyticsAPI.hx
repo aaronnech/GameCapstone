@@ -80,33 +80,51 @@ class AnalyticsAPI {
     }
 
     public static function emitEvent(category:String, event:String, value:Int=0) {
-        trace("LOGGING STUFF");
-        var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
-        req.onData = function(msg) {
-            trace("data: " + msg);
-        };
+        // var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
 
-        req.onError = function(msg) {
-            trace("error: " + msg);
-        };
+        // // req.addHeader("Access-Control-Allow-Origin", "*");
+        // req.setParameter("user_id", AnalyticsAPI.userID);
+        // req.setParameter("app_token", haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum));
+        // req.setParameter("version", "" + AnalyticsAPI.GAME_VERSION);
+        // req.setParameter("event_number", "" + AnalyticsAPI.eventNum);
+        // req.setParameter("host_name", AnalyticsAPI.host);
+        // req.setParameter("screen_token", AnalyticsAPI.screenToken);
+        // req.setParameter("screen_name", AnalyticsAPI.screenName);
+        // req.setParameter("event_category", category);
+        // req.setParameter("event_name", event);
+        // req.setParameter("event_value", "" + value);
+        // req.setParameter("is_a", AnalyticsAPI.isAEnabled ? "1" : "0");
+        // req.request(false);
+        //
 
-        req.onStatus = function(msg) {
-            trace("status: " + msg);
-        };
+        var url:String = AnalyticsAPI.SERVER_ENDPOINT;
+        url += "?";
+        url += "user_id=" + AnalyticsAPI.userID;
+        url += "&app_token=" + haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum);
+        url += "&version=" + AnalyticsAPI.GAME_VERSION;
+        url += "&event_number=" + AnalyticsAPI.eventNum;
+        url += "&host_name=" + AnalyticsAPI.host;
+        url += "&screen_token=" + AnalyticsAPI.screenToken;
+        url += "&screen_name=" + AnalyticsAPI.screenName;
+        url += "&event_category=" + category;
+        url += "&event_name=" + event;
+        url += "&event_value=" + value;
+        url += "&is_a=" + (AnalyticsAPI.isAEnabled ? "1" : "0");
 
-        // req.addHeader("Access-Control-Allow-Origin", "*");
-        req.setParameter("user_id", AnalyticsAPI.userID);
-        req.setParameter("app_token", haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum));
-        req.setParameter("version", "" + AnalyticsAPI.GAME_VERSION);
-        req.setParameter("event_number", "" + AnalyticsAPI.eventNum);
-        req.setParameter("host_name", AnalyticsAPI.host);
-        req.setParameter("screen_token", AnalyticsAPI.screenToken);
-        req.setParameter("screen_name", AnalyticsAPI.screenName);
-        req.setParameter("event_category", category);
-        req.setParameter("event_name", event);
-        req.setParameter("event_value", "" + value);
-        req.setParameter("is_a", AnalyticsAPI.isAEnabled ? "1" : "0");
-        req.request(false);
+        #if js
+            // well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
+            var img:js.html.Image = new js.html.Image();
+            img.src = url;
+        #elseif flash
+            // we must load GoogleAnalytics using Flash API (like loading an image to avoid the check
+            // of a crossdomain.xml
+            var l : flash.display.Loader = new flash.display.Loader();
+            var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
+            urlRequest.url=url;
+            //flash have unspoken error that can happen nonetheless due to denied DNS resolution...
+            l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
+            try{ l.load(urlRequest); }catch(e:Dynamic){}
+        #end
 
         AnalyticsAPI.eventNum += 1;
     }
