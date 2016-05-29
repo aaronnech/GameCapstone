@@ -81,7 +81,7 @@ class AnalyticsAPI {
 
     public static function emitEvent(category:String, event:String, value:Int=0) {
         var req = new Http(AnalyticsAPI.SERVER_ENDPOINT);
-        req.addHeader("Access-Control-Allow-Origin", "*");
+        // req.addHeader("Access-Control-Allow-Origin", "*");
         req.setParameter("user_id", AnalyticsAPI.userID);
         req.setParameter("app_token", haxe.crypto.Md5.encode(AnalyticsAPI.KEY + AnalyticsAPI.userID + AnalyticsAPI.eventNum));
         req.setParameter("version", "" + AnalyticsAPI.GAME_VERSION);
