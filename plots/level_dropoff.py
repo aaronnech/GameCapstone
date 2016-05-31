@@ -28,6 +28,7 @@ for t in aNotEnabled:
 	notAHistogram[num] += 1
 notAHistogram = normalize(notAHistogram)
 
+plt.title("Level Drop-Off")
 plt.xlabel("levels")
 plt.xticks(range(24))
 plt.plot(aHistogram, '-r', label="Old tutorial")
