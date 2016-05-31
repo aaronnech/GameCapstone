@@ -17,8 +17,9 @@ def getTimes(db):
         sLevel = int(re.findall(r'\d+', s[2])[0])
         for c in completes:
             if s[1] == c[1] and s[5] < c[5] and sLevel == int(re.findall(r'\d+', c[2])[0]) and c[0] > s[0]:
-                playsPerLevel[sLevel] += 1
-                totalTimePerLevel[sLevel] += c[0] - s[0]
+                if c[0] - s[0] < 2000:
+                    playsPerLevel[sLevel] += 1
+                    totalTimePerLevel[sLevel] += c[0] - s[0]
                 break
 
     return totalTimePerLevel / playsPerLevel
