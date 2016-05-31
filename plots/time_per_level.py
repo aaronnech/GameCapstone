@@ -10,8 +10,8 @@ def normalize(v):
 def getTimes(db):
     playsPerLevel = np.zeros(24)
     totalTimePerLevel = np.zeros(24)
-    starts = [t for t in a if t[3] == "level-start"]
-    completes = [t for t in a if t[3] == "level-complete"]
+    starts = [t for t in db if t[3] == "level-start"]
+    completes = [t for t in db if t[3] == "level-complete"]
 
     for s in starts:
         sLevel = int(re.findall(r'\d+', s[2])[0])
