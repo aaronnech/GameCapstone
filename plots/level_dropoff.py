@@ -5,10 +5,7 @@ import numpy as np
 import re
 
 def normalize(v):
-    norm=np.linalg.norm(v)
-    if norm==0:
-       return v
-    return v/norm
+    return v/v[0]
 
 conn = sqlite3.connect(sys.argv[1])
 c = conn.cursor()
@@ -33,7 +30,7 @@ notAHistogram = normalize(notAHistogram)
 
 plt.xlabel("levels")
 plt.xticks(range(24))
-plt.plot(aHistogram, '-r', label="Improved tutorial")
-plt.plot(notAHistogram, '-b', label="Old tutorial")
+plt.plot(aHistogram, '-r', label="Old tutorial")
+plt.plot(notAHistogram, '-b', label="Improved tutorial")
 plt.legend()
 plt.show()
