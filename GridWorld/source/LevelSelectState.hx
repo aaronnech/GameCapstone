@@ -23,7 +23,17 @@ class LevelSelectState extends FlxState
 	private var next:FlxButton;
 	private var back:FlxButton;
 	private var prev:FlxButton;
-	private var save:FlxSave;
+	public var save:FlxSave;
+
+	public function new() {
+		super();
+		this.levels = loadLevels();
+		this.save = new FlxSave();
+		this.save.bind("Game");
+		if (!this.save.data.highestLevel) {
+			this.save.data.highestLevel = 0;
+		}
+	}
 
 	private function loadLevels():Array<Level> {
 		var allAssets = openfl.Assets.list();
@@ -78,10 +88,6 @@ class LevelSelectState extends FlxState
 		var row = 0;
 		var col = 0;
 
-		if (!this.save.data.highestLevel) {
-			this.save.data.highestLevel = 0;
-		}
-
 		for (level in currentLevels) {
 			var btn = new FlxButton(0, 0, "" + level.number, startLevel.bind(level.number - 1));
 			btn.scale.set(1, 4.5);
@@ -127,11 +133,8 @@ class LevelSelectState extends FlxState
 		super.create();
 		AnalyticsAPI.setScreen('levelSelect');
 		AnalyticsAPI.emitEvent('progress', 'loadLevelSelect');
-		this.save = new FlxSave();
-		this.save.bind("Game");
 		var backdrop = new FlxBackdrop('assets/images/justfloor.png');
 		add(backdrop);
-		this.levels = loadLevels();
 		this.currentPage = 0;
 		this.levelGrid = new FlxTypedGroup<FlxButton>();
 
@@ -168,5 +171,13 @@ class LevelSelectState extends FlxState
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+	}
+
+	public function getStartState() {
+		if (this.save.data.highestLevel == 0) {
+			AnalyticsAPI.click('levels', 'clickLevel0', 1);
+			return new PlayState(this.levels, 0);
+		}
+		return null;
 	}
 }

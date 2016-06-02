@@ -40,6 +40,12 @@ class MenuState extends FlxState {
 
 	private function clickPlay():Void {
 		AnalyticsAPI.click('navigation', 'play');
-		FlxG.switchState(new LevelSelectState());
+		var levelSelect = new LevelSelectState();
+		var levelOne = levelSelect.getStartState();
+		if (levelOne == null) {
+			FlxG.switchState(levelSelect);
+		} else {
+			FlxG.switchState(levelOne);
+		}
 	}
 }
