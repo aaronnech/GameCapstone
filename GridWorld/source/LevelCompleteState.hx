@@ -38,6 +38,7 @@ class LevelCompleteState extends FlxState {
 	override public function create():Void {
 		super.create();
 		this.yaySound = FlxG.sound.load("assets/sounds/yay.wav");
+		this.yaySound.volume = 0.5;
 		this.yaySound.play();
 
 		FlxG.mouse.visible = true;
@@ -90,11 +91,11 @@ class LevelCompleteState extends FlxState {
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (FlxG.keys.anyJustPressed([P, ENTER, RIGHT, SPACE])) {
+		if (FlxG.keys.anyJustPressed([D, P, ENTER, RIGHT])) {
 			this.clickNext();
-		} else if (FlxG.keys.anyJustPressed([R, UP])) {
+		} else if (FlxG.keys.anyJustPressed([W, R, UP])) {
 			this.clickRedo();
-		} else if (FlxG.keys.anyJustPressed([B, M, LEFT, BACKSPACE])) {
+		} else if (FlxG.keys.anyJustPressed([A, LEFT, BACKSPACE])) {
 			this.clickBack();
 		}
 	}

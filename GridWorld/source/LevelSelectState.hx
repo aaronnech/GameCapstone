@@ -92,8 +92,10 @@ class LevelSelectState extends FlxState
 			var btn = new FlxButton(0, 0, "" + level.number, startLevel.bind(level.number - 1));
 			btn.scale.set(1, 4.5);
 			btn.label.size = 18;
+			btn.updateHitbox();
+			btn.label.offset.y -= 30;
 			btn.x = col * LevelSelectState.GRID_GAP + LevelSelectState.GRID_X;
-			btn.y = row * LevelSelectState.GRID_GAP + LevelSelectState.GRID_Y;
+			btn.y = row * LevelSelectState.GRID_GAP + LevelSelectState.GRID_Y - 30;
 			if (this.save.data.highestLevel < level.number - 1) {
 				btn.alpha = 0.5;
 			}
@@ -171,13 +173,17 @@ class LevelSelectState extends FlxState
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+		if (FlxG.keys.anyJustPressed([A, LEFT, BACKSPACE])) {
+			this.clickBack();
+		}
 	}
 
-	public function getStartState() {
+	public function getStartState():FlxState {
 		if (this.save.data.highestLevel == 0) {
 			AnalyticsAPI.click('levels', 'clickLevel0', 1);
 			return new PlayState(this.levels, 0);
+		} else {
+			return this;
 		}
-		return null;
 	}
 }

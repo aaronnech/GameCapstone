@@ -36,6 +36,7 @@ class PlayState extends FlxState {
 	private var tickSound:FlxSound;
 	private var crashSound:FlxSound;
 	private var shortcutSprite:FlxSprite;
+	private var muteButton:FlxButton;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
@@ -100,23 +101,30 @@ class PlayState extends FlxState {
 		}
 
 		// UI
-		add(new FlxText(210, 10, 300, "Level " + this.level.number, 14));
 		this.createUI();
 		this.totalElapsed = 0;
 	}
 
 	private function createUI():Void {
-		this.playButton.loadGraphic("assets/images/stop.png");
+		add(new FlxText(250, 10, 300, "Level " + this.level.number, 14));
         this.playButton.loadGraphic("assets/images/play.png");
 
         var backButton = new FlxButton(100, 10, "Menu", this.onClickBack);
         var shortcutButton = new FlxButton(10, 10, "Shortcuts", this.onClickShortcut);
         this.shortcutSprite = new FlxSprite(50, 50, "assets/images/help.png");
         shortcutSprite.visible = false;
-        this.fastForwardButton = new FlxButton(10, FlxG.height - 100, "Fast Forward", this.onFastForward);
-        this.fastForwardButton.alpha = 0.5;
+        this.fastForwardButton = new FlxButton(5, FlxG.height - 98, "Speed x2", this.onFastForward);
+        this.fastForwardButton.alpha = 0.7;
+
+        this.muteButton = new FlxButton(190, 10, "", this.onClickMute);
+        if (FlxG.sound.muted) {
+        	this.muteButton.loadGraphic("assets/images/mute.png", true, 20, 20);
+        } else {
+        	this.muteButton.loadGraphic("assets/images/sound.png", true, 20, 20);
+        }
 
         add(backButton);
+        add(muteButton);
         add(shortcutButton);
         add(shortcutSprite);
         add(this.playButton);
@@ -153,19 +161,27 @@ class PlayState extends FlxState {
 		AnalyticsAPI.click('help', 'shortcuts');
 	}
 
-	private function onFastForward():Void {
-		// if (!this.controlManager.hasControls()) {
-		// 	AnalyticsAPI.click('controls', 'fastforward', 0);
-		// 	return;
-		// }
+	private function onClickMute():Void {
+		if (FlxG.sound.muted) {
+			AnalyticsAPI.click('controls', 'mute', 0);
+			this.muteButton.loadGraphic("assets/images/sound.png", true, 20, 20);
+			FlxG.sound.muted = false;
+		} else {
+			AnalyticsAPI.click('controls', 'mute', 1);
+			this.muteButton.loadGraphic("assets/images/mute.png", true, 20, 20);
+			FlxG.sound.muted = true;
+		}
+	}
 
-		// AnalyticsAPI.click('controls', 'fastforward', 1);
+	private function onFastForward():Void {
 		if (this.fastForwardButton.alpha == 1.0) {
-			this.fastForwardButton.alpha = 0.5;
+			AnalyticsAPI.click('controls', 'fastforward', 0);
+			this.fastForwardButton.alpha = 0.7;
 			PlayState.TICK_TIME = 0.5;
 		} else {
+			AnalyticsAPI.click('controls', 'fastforward', 1);
 			this.fastForwardButton.alpha = 1.0;
-			PlayState.TICK_TIME = 0.2;
+			PlayState.TICK_TIME = 0.25;
 		}
 	}
 

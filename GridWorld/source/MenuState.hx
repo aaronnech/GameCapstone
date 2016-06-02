@@ -38,14 +38,16 @@ class MenuState extends FlxState {
 		add(logo);
 	}
 
+	override public function update(elapsed:Float):Void {
+		super.update(elapsed);
+		if (FlxG.keys.anyJustPressed([SPACE, ENTER, P])) {
+			this.clickPlay();
+		}
+	}
+
 	private function clickPlay():Void {
 		AnalyticsAPI.click('navigation', 'play');
 		var levelSelect = new LevelSelectState();
-		var levelOne = levelSelect.getStartState();
-		if (levelOne == null) {
-			FlxG.switchState(levelSelect);
-		} else {
-			FlxG.switchState(levelOne);
-		}
+		FlxG.switchState(levelSelect.getStartState());
 	}
 }
