@@ -51,7 +51,7 @@ class ControlManager {
         this.buttons = new HashMap();
         this.controls = new HashMap();
         this.controlsEnabled = true;
-        this.selectedTrack = -1;
+        this.selectedTrack = 0;
         this.tracks = new Array();
         this.mouseOverTrack = new HashMap();
 
@@ -75,6 +75,7 @@ class ControlManager {
             this.tracks.push(track);
             this.parentState.add(track);
         }
+        this.tracks[0].alpha = 1.0;
 
         this.makeButtons();
 

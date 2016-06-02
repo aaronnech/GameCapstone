@@ -86,4 +86,16 @@ class LevelCompleteState extends FlxState {
 		AnalyticsAPI.click("navigation", "redoLevel");
 		FlxG.switchState(new PlayState(this.levels, this.nextIndex - 1));
 	}
+
+	override public function update(elapsed:Float):Void {
+		super.update(elapsed);
+
+		if (FlxG.keys.anyJustPressed([P, ENTER, RIGHT, SPACE])) {
+			this.clickNext();
+		} else if (FlxG.keys.anyJustPressed([R, UP])) {
+			this.clickRedo();
+		} else if (FlxG.keys.anyJustPressed([B, M, LEFT, BACKSPACE])) {
+			this.clickBack();
+		}
+	}
 }

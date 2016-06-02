@@ -19,6 +19,7 @@ import haxe.ds.HashMap;
 
 class PlayState extends FlxState {
 	public static var TICK_TIME:Float = 0.5;
+
 	private var levels:Array<Level>;
 	private var level:Level;
 	private var mainSimulator:Simulator;
@@ -29,11 +30,12 @@ class PlayState extends FlxState {
 	private var controls:HashMap<Color, Array<Control>>;
 	private var isPlaying:Bool;
 	private var playButton:FlxButton;
+	private var fastForwardButton:FlxButton;
 	private var helpText:FlxText;
 	private var levelIndex:Int;
 	private var tickSound:FlxSound;
 	private var crashSound:FlxSound;
-	private var helpSprite:FlxSprite;
+	private var shortcutSprite:FlxSprite;
 
 	public function new(levels:Array<Level>, cur:Int) {
 		super();
@@ -45,6 +47,7 @@ class PlayState extends FlxState {
 
 	override public function create():Void {
 		super.create();
+		PlayState.TICK_TIME = 0.5;
 		var backdrop = new FlxBackdrop('assets/images/playbg.png');
 		add(backdrop);
 
@@ -97,7 +100,7 @@ class PlayState extends FlxState {
 		}
 
 		// UI
-		add(new FlxText(210, 10, 300, "Level " + (this.levelIndex + 1), 14));
+		add(new FlxText(210, 10, 300, "Level " + this.level.number, 14));
 		this.createUI();
 		this.totalElapsed = 0;
 	}
@@ -107,14 +110,19 @@ class PlayState extends FlxState {
         this.playButton.loadGraphic("assets/images/play.png");
 
         var backButton = new FlxButton(100, 10, "Menu", this.onClickBack);
-        var helpButton = new FlxButton(10, 10, "Shortcuts", this.onClickHelp);
-        this.helpSprite = new FlxSprite(50, 50, "assets/images/help.png");
-        helpSprite.visible = false;
+        var shortcutButton = new FlxButton(10, 10, "Shortcuts", this.onClickShortcut);
+        this.shortcutSprite = new FlxSprite(50, 50, "assets/images/help.png");
+        shortcutSprite.visible = false;
+        this.fastForwardButton = new FlxButton(10, FlxG.height - 100, "Fast Forward", this.onFastForward);
+        this.fastForwardButton.alpha = 0.5;
 
         add(backButton);
-        add(helpButton);
-        add(helpSprite);
+        add(shortcutButton);
+        add(shortcutSprite);
         add(this.playButton);
+        if (this.levelIndex > 0) {
+        	add(fastForwardButton);
+        }
 	}
 
 	private function onClickBack() {
@@ -140,9 +148,25 @@ class PlayState extends FlxState {
 		this.spriteManager.snap();
 	}
 
-	private function onClickHelp():Void {
-		this.helpSprite.visible = !this.helpSprite.visible;
+	private function onClickShortcut():Void {
+		this.shortcutSprite.visible = !this.shortcutSprite.visible;
 		AnalyticsAPI.click('help', 'shortcuts');
+	}
+
+	private function onFastForward():Void {
+		// if (!this.controlManager.hasControls()) {
+		// 	AnalyticsAPI.click('controls', 'fastforward', 0);
+		// 	return;
+		// }
+
+		// AnalyticsAPI.click('controls', 'fastforward', 1);
+		if (this.fastForwardButton.alpha == 1.0) {
+			this.fastForwardButton.alpha = 0.5;
+			PlayState.TICK_TIME = 0.5;
+		} else {
+			this.fastForwardButton.alpha = 1.0;
+			PlayState.TICK_TIME = 0.2;
+		}
 	}
 
 	private function updatePlayControls():Void {
@@ -217,12 +241,14 @@ class PlayState extends FlxState {
 
 		if (FlxG.keys.anyJustPressed([P, ENTER])) {
 			this.onClickPlay();
+		} else if (FlxG.keys.anyJustPressed([F])) {
+			this.onFastForward();
 		}
 		this.controlManager.keyboardControls();
 		this.updatePlayControls();
 
-		if (this.helpSprite.visible && FlxG.mouse.justPressed) {
-			this.helpSprite.visible = false;
+		if (this.shortcutSprite.visible && FlxG.mouse.justPressed) {
+			this.shortcutSprite.visible = false;
 		}
 	}
 
