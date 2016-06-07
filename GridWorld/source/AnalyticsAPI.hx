@@ -48,7 +48,6 @@ class AnalyticsAPI {
 
         #if flash
             flixel.addons.api.FlxKongregate.init(function() {
-                flixel.addons.api.FlxKongregate.connect();
                 AnalyticsAPI.kongLoaded = true;
             });
         #end
