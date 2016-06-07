@@ -95,11 +95,11 @@ class PlayState extends FlxState {
 		this.playButton = new FlxButton(10, FlxG.height - 70, "", this.onClickPlay);
 
 		if (level.number == 1) {
-			if (AnalyticsAPI.isA()) {
-				this.tutorialA();
-			} else {
+			// if (AnalyticsAPI.isA()) {
+			// 	this.tutorialA();
+			// } else {
 				this.tutorialB();
-			}
+			// }
 		}
 
 		// UI

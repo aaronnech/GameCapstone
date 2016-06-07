@@ -36,6 +36,8 @@ class LevelCompleteState extends FlxState {
 
 		var scoreManager = new ScoreManager(levels);
 		scoreManager.setLevelScore(nextIndex - 1, score);
+
+		AnalyticsAPI.sendMaxScoreToKong(scoreManager.getTotalScore());
 	}
 
 	override public function create():Void {
