@@ -5,7 +5,7 @@ import haxe.Http;
 class AnalyticsAPI {
     private static var SERVER_ENDPOINT = "https://students.washington.edu/drapeau/games/logger.php";
     private static var KEY = "COFFEEISGO123123OD_ANDLYFEBLOOD23123123";
-    private static var GAME_VERSION = "1.0";
+    private static var GAME_VERSION = "2.5";
     private static var eventNum:Int;
     private static var save:FlxSave;
     private static var userID:String;
