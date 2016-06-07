@@ -1,15 +1,11 @@
-import haxe.Serializer;
-import haxe.Unserializer;
 import flixel.util.FlxSave;
 
 class ScoreManager {
-    private var serializer:Serializer;
     private var save:FlxSave;
     private var levels:Array<Level>;
 
     public function new(levels:Array<Level>) {
         this.levels = levels;
-        this.serializer = new Serializer();
 
         this.save = new FlxSave();
         this.save.bind("Game");
