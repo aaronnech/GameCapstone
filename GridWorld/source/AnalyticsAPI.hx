@@ -3,6 +3,10 @@ import flixel.util.FlxSave;
 import haxe.Http;
 
 class AnalyticsAPI {
+    #if flash
+        private static var kongLoaded:Bool;
+    #end
+
     private static var SERVER_ENDPOINT = "https://students.washington.edu/drapeau/games/logger.php";
     private static var KEY = "COFFEEISGO123123OD_ANDLYFEBLOOD23123123";
     private static var GAME_VERSION = "2.5";
@@ -19,12 +23,27 @@ class AnalyticsAPI {
         return GUID.gen();
     }
 
+    public static function sendMaxScoreToKong(score:Int) {
+        #if flash
+            if (AnalyticsAPI.kongLoaded) {
+                flixel.addons.api.FlxKongregate.submitScore(score, "Normal");
+            }
+        #end
+    }
+
     public static function isA() {
         return AnalyticsAPI.isAEnabled;
     }
 
     public static function init() {
         if (AnalyticsAPI.isInitialized) return;
+
+        #if flash
+            flixel.addons.api.FlxKongregate.init(function() {
+                flixel.addons.api.FlxKongregate.connect();
+                AnalyticsAPI.kongLoaded = true;
+            });
+        #end
 
         // Get or set the UUID / AB Test cohort
         AnalyticsAPI.save = new FlxSave();
