@@ -31,6 +31,14 @@ class AnalyticsAPI {
         #end
     }
 
+    public static function sendBeatAllLevelsToKong() {
+        #if flash
+            if (AnalyticsAPI.kongLoaded) {
+                flixel.addons.api.FlxKongregate.submitStats("Beat All Levels", 1);
+            }
+        #end
+    }
+
     public static function isA() {
         return AnalyticsAPI.isAEnabled;
     }
