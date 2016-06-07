@@ -33,6 +33,9 @@ class LevelCompleteState extends FlxState {
 
 		save.data.highestLevel = Math.max(nextIndex, save.data.highestLevel);
 		save.flush();
+
+		var scoreManager = new ScoreManager(levels);
+		scoreManager.setLevelScore(nextIndex - 1, score);
 	}
 
 	override public function create():Void {
@@ -52,6 +55,13 @@ class LevelCompleteState extends FlxState {
 			next.screenCenter();
 			next.x += 100;
 			add(next);
+		} else {
+			var winText = new FlxText(0, 0);
+			winText.size = 20;
+			winText.text = "Congratulations, you are a GridWorld master!";
+			winText.screenCenter();
+			winText.y -= 150;
+			add(winText);
 		}
 
 		var redo = new FlxButton(0, 0, "", clickRedo);

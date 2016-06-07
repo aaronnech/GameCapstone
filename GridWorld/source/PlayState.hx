@@ -25,6 +25,7 @@ class PlayState extends FlxState {
 	private var mainSimulator:Simulator;
     private var spriteManager:ObjectManager;
     private var controlManager:ControlManager;
+    private var scoreManager:ScoreManager;
 	private var tileMap:FlxTilemap;
 	private var totalElapsed:Float;
 	private var controls:HashMap<Color, Array<Control>>;
@@ -71,6 +72,7 @@ class PlayState extends FlxState {
 		this.add(this.tileMap);
 
 		this.mainSimulator = new Simulator(this.level.getWidth(), this.level.getHeight(), this.level);
+		this.scoreManager = new ScoreManager(this.levels);
 
 		// Create control panel
 		this.controlManager = new ControlManager(70, 6, this.level.getColors(),
@@ -106,7 +108,10 @@ class PlayState extends FlxState {
 	}
 
 	private function createUI():Void {
-		add(new FlxText(250, 10, 300, "Level " + this.level.number, 14));
+		var levelInfo = new FlxText(230, 10, 300, "", 14);
+		levelInfo.text = "Level " + this.level.number + "      High Score: " +
+						 this.scoreManager.getLevelScore(this.levelIndex);
+		add(levelInfo);
         this.playButton.loadGraphic("assets/images/play.png");
 
         var backButton = new FlxButton(100, 10, "Menu", this.onClickBack);
@@ -181,7 +186,7 @@ class PlayState extends FlxState {
 		} else {
 			AnalyticsAPI.click('controls', 'fastforward', 1);
 			this.fastForwardButton.alpha = 1.0;
-			PlayState.TICK_TIME = 0.25;
+			PlayState.TICK_TIME = 0.15;
 		}
 	}
 

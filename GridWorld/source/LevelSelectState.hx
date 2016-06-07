@@ -161,6 +161,11 @@ class LevelSelectState extends FlxState
 		this.back.x = 40;
 		add(this.back);
 
+		var scoreManager = new ScoreManager(this.levels);
+		var totalScore = new FlxText(150, 0, 300, "Total Score: " + scoreManager.getTotalScore(), 20);
+		totalScore.y = FlxG.height - 50;
+		add(totalScore);
+
 		this.updatePage();
 		this.updateNextPrevious();
 		add(this.levelGrid);
