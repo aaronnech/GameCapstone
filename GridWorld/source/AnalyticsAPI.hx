@@ -31,10 +31,10 @@ class AnalyticsAPI {
         #end
     }
 
-    public static function sendBeatAllLevelsToKong() {
+    public static function sendHighestLevelToKong(lvl:Int) {
         #if flash
             if (AnalyticsAPI.kongLoaded) {
-                flixel.addons.api.FlxKongregate.submitStats("Beat All Levels", 1);
+                flixel.addons.api.FlxKongregate.submitStats("Highest Level Beat", lvl);
             }
         #end
     }
