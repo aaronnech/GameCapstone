@@ -34,7 +34,7 @@ class ScoreManager {
 
     public function getTotalScore() {
         var sum = 0;
-        for (i in 0...this.levels.length - 1) {
+        for (i in 0...this.levels.length) {
             sum += Std.int(this.save.data.scores[i]);
         }
         return sum;

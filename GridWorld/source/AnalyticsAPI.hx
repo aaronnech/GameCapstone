@@ -26,7 +26,7 @@ class AnalyticsAPI {
     public static function sendMaxScoreToKong(score:Int) {
         #if flash
             if (AnalyticsAPI.kongLoaded) {
-                flixel.addons.api.FlxKongregate.submitScore(score, "Normal");
+                flixel.addons.api.FlxKongregate.submitStats("High Score", score);
             }
         #end
     }
