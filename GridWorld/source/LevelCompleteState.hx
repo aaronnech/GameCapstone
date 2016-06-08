@@ -87,8 +87,10 @@ class LevelCompleteState extends FlxState {
 	}
 
 	private function clickNext():Void {
-		AnalyticsAPI.click("navigation", "nextLevel");
-		FlxG.switchState(new PlayState(this.levels, this.nextIndex));
+		if (this.nextIndex < this.levels.length) {
+			AnalyticsAPI.click("navigation", "nextLevel");
+			FlxG.switchState(new PlayState(this.levels, this.nextIndex));
+		}
 	}
 
 	private function clickBack():Void {
