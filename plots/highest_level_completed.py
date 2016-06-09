@@ -17,16 +17,16 @@ version_25 = [t for t in a if t[0] == '2.5']
 
 lastEventPerUser = lastEventByUser(version_1)
 highestPerUser, maxLevel = highestLevelsByUser(version_1)
-keepOnlyValue(highestPerUser, lastEventPerUser, 'play')
+keepOnlyValue(highestPerUser, lastEventPerUser, ['play', 'addControl', 'removeControl'])
 dist_1 = distributionOfHighestLevels(highestPerUser, maxLevel)
 
 lastEventPerUser = lastEventByUser(version_25)
 highestPerUser, maxLevel = highestLevelsByUser(version_25)
-keepOnlyValue(highestPerUser, lastEventPerUser, 'play')
+keepOnlyValue(highestPerUser, lastEventPerUser, ['play', 'addControl', 'removeControl'])
 dist_25 = distributionOfHighestLevels(highestPerUser, maxLevel)
 
 # Plot comparison
-lvls = range(1, 25)
+lvls = range(1, 10)
 bar_width = 0.35
 plt.xlabel('Highest Level Completed', fontsize=25)
 plt.ylabel('Percent of total users in cohort', fontsize=25)

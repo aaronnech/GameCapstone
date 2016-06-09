@@ -19,12 +19,12 @@ def lastEventByUser(rows):
 
 def filterValue(filtered, userDict, value):
 	for uid in filtered.keys():
-		if userDict[uid] == value:
+		if userDict[uid] in value:
 			del filtered[uid]
 
 def keepOnlyValue(filtered, userDict, value):
 	for uid in filtered.keys():
-		if userDict[uid] != value:
+		if userDict[uid] not in value:
 			del filtered[uid]
 
 def highestLevelsByUser(rows):
